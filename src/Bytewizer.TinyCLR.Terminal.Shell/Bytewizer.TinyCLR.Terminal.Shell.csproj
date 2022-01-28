@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Core\Bytewizer.TinyCLR.Core.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Cryptography\Bytewizer.TinyCLR.Cryptography.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Identity.Abstractions\Bytewizer.TinyCLR.Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Logging.Abstractions\Bytewizer.TinyCLR.Logging.Abstractions.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Numerics\Bytewizer.TinyCLR.Numerics.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Pipeline\Bytewizer.TinyCLR.Pipeline.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Sockets\Bytewizer.TinyCLR.Sockets.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Terminal\Bytewizer.TinyCLR.Terminal.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SecureShell\" />
+  </ItemGroup>
+
+</Project>
