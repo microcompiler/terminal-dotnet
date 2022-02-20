@@ -223,7 +223,7 @@ namespace Bytewizer.TinyCLR.Sockets.Channel
         /// <param name="text">A <see cref="string"/> that contains data to be UTF8 encoded and sent.</param>
         public int WriteLine(string text)
         {
-            return Write($"{text}\n\r");
+            return Write($"{text}\r\n");
         }
 
         /// <summary>

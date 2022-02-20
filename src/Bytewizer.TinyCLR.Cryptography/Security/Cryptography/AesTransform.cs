@@ -5,14 +5,15 @@ using System;
 
 namespace Bytewizer.TinyCLR.Security.Cryptography
 {
-	internal class AesTransform : SymmetricTransform {
+	internal class AesTransform : SymmetricTransform 
+	{
 		private uint[] expandedKey;
 	
 		private const int Nb = 4;
 		private int Nk;
 		private int Nr;
 	
-		public AesTransform (Aes algo, bool encryption, byte[] key, byte[] iv) : base (algo, encryption, iv)
+		public AesTransform (AES algo, bool encryption, byte[] key, byte[] iv) : base (algo, encryption, iv)
 		{
 			if (key == null)
 				throw new Exception ("key is null");

@@ -5,14 +5,15 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
 {
     public abstract class SHA1 : HashAlgorithm
     {
-        protected SHA1() {
+        protected SHA1()
+        {
             HashSizeValue = 160;
         }
 
-        new static public SHA1 Create() {
-
-            return new SHA1CryptoServiceProvider ();
-       }
+        new static public SHA1 Create()
+        {
+            return new SHA1CryptoServiceProvider();
+        }
     }
 }
 

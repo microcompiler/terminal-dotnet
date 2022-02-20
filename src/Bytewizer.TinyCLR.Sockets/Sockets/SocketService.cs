@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
 
-
-
-
-
 #if NanoCLR
 using Bytewizer.NanoCLR.Hosting;
 using Bytewizer.NanoCLR.Logging;

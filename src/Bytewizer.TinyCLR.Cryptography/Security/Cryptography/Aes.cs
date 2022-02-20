@@ -3,21 +3,15 @@
 
 namespace Bytewizer.TinyCLR.Security.Cryptography
 {
-    /// <summary>
-    /// Abstract base class for implementations of the AES algorithm
-    /// </summary>
-    public abstract class Aes : SymmetricAlgorithm
+    public abstract class AES : SymmetricAlgorithm
     {
-        private static KeySizes[] s_legalBlockSizes = { new KeySizes(128, 128, 0) };
-        private static KeySizes[] s_legalKeySizes = { new KeySizes(128, 256, 64) };
+        private static readonly KeySizes[] _legalBlockSizes = { new KeySizes(128, 128, 0) };
+        private static readonly KeySizes[] _legalKeySizes = { new KeySizes(128, 256, 64) };
 
-        /// <summary>
-        ///     Setup the default values for AES encryption
-        /// </summary>
-        protected Aes()
+        protected AES()
         {
-            LegalBlockSizesValue = s_legalBlockSizes;
-            LegalKeySizesValue = s_legalKeySizes;
+            LegalBlockSizesValue = _legalBlockSizes;
+            LegalKeySizesValue = _legalKeySizes;
 
             BlockSizeValue = 128;
             FeedbackSizeValue = 8;
@@ -25,9 +19,9 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             ModeValue = CipherMode.CBC;
         }
 
-        public static new Aes Create()
+        public static new AES Create()
         {
-            return new AesCryptoServiceProvider();
+            return new AESCryptoServiceProvider();
         }
     }
 }

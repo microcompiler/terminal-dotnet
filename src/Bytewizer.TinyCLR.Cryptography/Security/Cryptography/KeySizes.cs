@@ -1,47 +1,40 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace Bytewizer.TinyCLR.Security.Cryptography {
-	
+namespace Bytewizer.TinyCLR.Security.Cryptography
+{
+    public sealed class KeySizes
+    {
+        public KeySizes(int minSize, int maxSize, int skipSize)
+        {
+            MinSize = minSize;
+            MaxSize = maxSize;
+            SkipSize = skipSize;
+        }
 
-	public sealed class KeySizes {
-		private int _maxSize;
-		private int _minSize;
-		private int _skipSize;
+        public int MinSize { get; private set; }
+        public int MaxSize { get; private set; }
+        public int SkipSize { get; private set; }
 
-		public KeySizes (int minSize, int maxSize, int skipSize) 
-		{
-			_maxSize = maxSize;
-			_minSize = minSize;
-			_skipSize = skipSize;
-		}
-		
-		public int MaxSize {
-			get { return _maxSize; }
-		}
-		
-		public int MinSize {
-			get { return _minSize; }
-		}
-		
-		public int SkipSize {
-			get { return _skipSize; }
-		}
-	
-		internal bool IsLegal (int keySize) 
-		{
-			int ks = keySize - MinSize;
-			bool result = ((ks >= 0) && (keySize <= MaxSize));
-			return ((SkipSize == 0) ? result : (result && (ks % SkipSize == 0)));
-		}
+        internal bool IsLegal(int keySize)
+        {
+            int ks = keySize - MinSize;
+            bool result = (ks >= 0) && (keySize <= MaxSize);
 
-		internal static bool IsLegalKeySize (KeySizes[] legalKeys, int size) 
-		{
-			foreach (KeySizes legalKeySize in legalKeys) {
-				if (legalKeySize.IsLegal (size)) 
-					return true;
-			}
-			return false;
-		}
-	}
+            return (SkipSize == 0) ? result : (result && (ks % SkipSize == 0));
+        }
+
+        internal static bool IsLegalKeySize(KeySizes[] legalKeys, int size)
+        {
+            foreach (KeySizes legalKeySize in legalKeys)
+            {
+                if (legalKeySize.IsLegal(size))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 }

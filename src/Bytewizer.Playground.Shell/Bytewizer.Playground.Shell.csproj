@@ -8,15 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Core\Bytewizer.TinyCLR.Core.csproj" />
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Cryptography\Bytewizer.TinyCLR.Cryptography.csproj" />
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Identity.Abstractions\Bytewizer.TinyCLR.Identity.Abstractions.csproj" />
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Logging.Abstractions\Bytewizer.TinyCLR.Logging.Abstractions.csproj" />
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Numerics\Bytewizer.TinyCLR.Numerics.csproj" />
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Pipeline\Bytewizer.TinyCLR.Pipeline.csproj" />
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Sockets\Bytewizer.TinyCLR.Sockets.csproj" />
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Terminal.Shell\Bytewizer.TinyCLR.Terminal.Shell.csproj" />
-    <ProjectReference Include="..\Bytewizer.TinyCLR.Terminal\Bytewizer.TinyCLR.Terminal.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Core\Bytewizer.CLR.Core.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Cryptography\Bytewizer.CLR.Cryptography.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Identity.Abstractions\Bytewizer.CLR.Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Logging.Abstractions\Bytewizer.CLR.Logging.Abstractions.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Numerics\Bytewizer.CLR.Numerics.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Pipeline\Bytewizer.CLR.Pipeline.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Sockets\Bytewizer.CLR.Sockets.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Terminal.Shell\Bytewizer.CLR.Terminal.Shell.csproj" />
+    <ProjectReference Include="..\Bytewizer.TinyCLR.Terminal\Bytewizer.CLR.Terminal.csproj" />
   </ItemGroup>
 
 </Project>

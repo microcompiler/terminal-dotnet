@@ -14,6 +14,7 @@ namespace Bytewizer.TinyCLR.Terminal
         private static readonly EventId _commandResponse = new EventId(113, "Response Command Message");
         private static readonly EventId _loginSucceeded = new EventId(114, "Login Succeeded");
         private static readonly EventId _loginFailed = new EventId(115, "Login Failed");
+        private static readonly EventId _handshake = new EventId(116, "Handshake Protocol Version");
 
         public static void CommandRequest(this ILogger logger, ShellContext context, byte[] buffer, int count)
         {
@@ -65,6 +66,26 @@ namespace Bytewizer.TinyCLR.Terminal
                 LogLevel.Information,
                 _loginFailed,
                  $"Login failed from remote clinet {context.Connection.RemoteEndpoint}. {message}",
+                null
+                );
+        }
+
+        public static void HandshakeSucceeded(this ILogger logger, string clientProtocol)
+        {
+            logger.Log(
+                LogLevel.Debug,
+                _handshake,
+                 $"Socket Client Verified {clientProtocol}",
+                null
+                );
+        }
+
+        public static void HandshakeFailed(this ILogger logger, string clientProtocol)
+        {
+            logger.Log(
+                LogLevel.Information,
+                _handshake,
+                 $"Server cannot accept connections from clients like: {clientProtocol}. This server only support SSH 2.0.",
                 null
                 );
         }

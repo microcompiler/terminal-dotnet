@@ -6,7 +6,7 @@ namespace Bytewizer.TinyCLR.Terminal
     /// Encapsulates all Terminal spcific information about an individual request.
     /// </summary>
     public class TerminalContext : ITerminalContext
-    {
+    {    
         /// <summary>
         /// Initializes an instance of the <see cref="TerminalContext" /> class.
         /// </summary>
@@ -40,14 +40,9 @@ namespace Bytewizer.TinyCLR.Terminal
         public TerminalResponse Response { get; private set; }
 
         /// <summary>
-        /// Gets or sets the incoming commands for this request.
+        /// Get the state for this session.
         /// </summary>
-        public byte[] OptionCommands { get; set; }
-
-        /// <summary>
-        /// Get the session state for this request.
-        /// </summary>
-        public bool Active { get; set; } = true;
+        public virtual bool Active { get; set; }
 
         /// <summary>
         /// Closes the connected socket channel and clears context.
@@ -58,7 +53,7 @@ namespace Bytewizer.TinyCLR.Terminal
             Options.Clear();
             Request.Clear();
             Response.Clear();
-            Active = true;
+            Active = false;
         }
     }
 }

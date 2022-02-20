@@ -18,9 +18,13 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             if (disposing)
             {
                 if (KeyValue != null)
+                {
                     Array.Clear(KeyValue, 0, KeyValue.Length);
+                }
+
                 KeyValue = null;
             }
+
             base.Dispose(disposing);
         }
 
@@ -30,14 +34,17 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             set
             {
                 if (State != 0)
+                {
                     throw new Exception("Cryptography_HashKeySet");
+                }
+
                 KeyValue = (byte[])value.Clone();
             }
         }
 
         new static public KeyedHashAlgorithm Create()
         {
-            return new HMACSHA1();
+            throw new NotSupportedException();
         }
     }
 }

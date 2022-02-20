@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
-using System.Security.Cryptography;
+
 using Bytewizer.TinyCLR.Sockets;
 
 namespace Bytewizer.TinyCLR.Terminal
@@ -19,18 +19,18 @@ namespace Bytewizer.TinyCLR.Terminal
         public ShellServerOptions()
         {
             string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            ProtocolExchangeMessage =  $"SSH-2.0-TinyCLR_{version}";
             WelcomeMessage = $"Welcome to TinyCLR Terminal Server [{version}]";
             HelpMessage = "Enter 'help' for a list of built-in commands";
             Assemblies = AppDomain.CurrentDomain.GetAssemblies();
         }
 
-        public void AddHostKeys(string type, RSAParameters parameters)
+        public void AddHostKeys(string type, string parameters)
         {
             if (!_hostKey.ContainsKey(type))
             {
                 _hostKey.Add(type, parameters);
             }
-
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Bytewizer.TinyCLR.Terminal
         /// <summary>
         /// Specifies the protocol verion exchange message.
         /// </summary>
-        public string ProtocolVersionExchange { get; set; } = "SSH-2.0-SSHServer";
+        public string ProtocolExchangeMessage { get; set; }
 
         /// <summary>
         /// Specifies the session help message.
@@ -77,5 +77,10 @@ namespace Bytewizer.TinyCLR.Terminal
         /// Time to login in seconds. (default: 60 seconds)
         /// </summary>
         public int TimeToLogin { get; set; } = 60;
+
+        /// <summary>
+        /// Time server waits to establish session. (default: 5 seconds)
+        /// </summary>
+        public int ConnectionTimeout { get; set; } = 5000;
     }
 }

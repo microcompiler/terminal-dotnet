@@ -2,10 +2,13 @@
 
 using Bytewizer.TinyCLR.Sockets;
 using Bytewizer.TinyCLR.Logging;
+using Bytewizer.TinyCLR.Hosting;
 using Bytewizer.TinyCLR.Pipeline;
 using Bytewizer.TinyCLR.Sockets.Channel;
-using Bytewizer.TinyCLR.Hosting;
 using Bytewizer.TinyCLR.Sockets.Listener;
+using System.Text.RegularExpressions;
+using FxSsh.Services;
+using FxSsh;
 
 namespace Bytewizer.TinyCLR.Terminal
 {
@@ -49,7 +52,7 @@ namespace Bytewizer.TinyCLR.Terminal
         {
             _options = options;
             _contextPool = new ContextPool();
-            _logger = loggerFactory.CreateLogger("Bytewizer.TinyCLR.Terminal");
+            _logger = loggerFactory.CreateLogger("Bytewizer.TinyCLR.Terminal.SecureShell");
             _terminalOptions = _options as ShellServerOptions;
 
             SetListener();
@@ -57,6 +60,17 @@ namespace Bytewizer.TinyCLR.Terminal
 
         private void Initialize(ServerOptionsDelegate configure)
         {
+            //TODO: Set socket buffers and linger
+            //private void SetSocketOptions()
+            //{
+            //    const int socketBufferSize = 2 * MaximumSshPacketSize;
+            //    _socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
+            //    _socket.LingerState = new LingerOption(enable: false, seconds: 0);
+            //    _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendBuffer, socketBufferSize);
+            //    _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, socketBufferSize);
+            //    _socket.ReceiveTimeout = (int)_timeout.TotalMilliseconds;
+            //}
+
             _options.Listen(22);
             _options.Pipeline(app =>
             {
@@ -69,13 +83,12 @@ namespace Bytewizer.TinyCLR.Terminal
         /// <summary>
         /// Gets configuration options of socket specific features.
         /// </summary>
-        public SocketListenerOptions ListenerOptions { get => _listener?.Options; }
+        public SocketListenerOptions ListenerOptions { get => _listener.Options; }
 
         /// <summary>
         /// Gets port that the server is actively listening on.
         /// </summary>
         public int ActivePort { get => _listener.ActivePort; }
-
 
         /// <summary>
         /// A client has connected.
@@ -96,21 +109,28 @@ namespace Bytewizer.TinyCLR.Terminal
 
                 // assign channel
                 context.Channel = channel;
-
+                
                 try
                 {
                     // Invoke pipeline
                     _options.Application.Invoke(context);
                 }
+                catch (SshConnectionException ex)
+                {
+                    //_logger.UnhandledException(ex);
+                    context.Session.Disconnect(ex.DisconnectReason, ex.Message);
+                }
                 catch (Exception ex)
                 {
                     _logger.UnhandledException(ex);
+                    context.Session.Disconnect();
                 }
-
-                _logger.RemoteClosed(channel);
-
-                // release context back to pool and close connection once pipeline is complete
-                _contextPool.Release(context);
+                finally
+                {
+                    // release context back to pool and close connection once pipeline is complete
+                    _logger.RemoteClosed(channel);
+                    _contextPool.Release(context);
+                }
             }
             catch (Exception ex)
             {

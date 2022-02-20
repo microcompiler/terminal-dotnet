@@ -5,8 +5,8 @@ using System;
 
 namespace Bytewizer.TinyCLR.Security.Cryptography
 {
-    public abstract class HMAC : KeyedHashAlgorithm {
-      
+    public abstract class HMAC : KeyedHashAlgorithm 
+    {   
         private int blockSizeValue = 64;
 
         protected int BlockSizeValue {

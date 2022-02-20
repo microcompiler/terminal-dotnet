@@ -5,39 +5,19 @@ using System;
 
 namespace Bytewizer.TinyCLR.Security.Cryptography
 {
-    public class HMACSHA1 : HMAC {
-        //
-        // public constructors
-        //
+    public class HMACSHA1 : HMAC 
+    {
+        public HMACSHA1 () 
+            : this (KeyBuilder.Key(64)) 
+        {}
 
-        public HMACSHA1 () : this (GenerateRandom(64)) {}
-
-        public HMACSHA1 (byte[] key) : this (key, false) {}
-
-        public HMACSHA1 (byte[] key, bool useManagedSha1) {
+        public HMACSHA1 (byte[] key) {
             m_hashName = "SHA1";
-//#if FEATURE_CRYPTO && !FULL_AOT_RUNTIME
-//            if (useManagedSha1) {
-//#endif // FEATURE_CRYPTO
-//                m_hash1 = new SHA1Managed();
-//                m_hash2 = new SHA1Managed();
-//#if FEATURE_CRYPTO && !FULL_AOT_RUNTIME
-//            } else {
-                m_hash1 = new SHA1CryptoServiceProvider();
-                m_hash2 = new SHA1CryptoServiceProvider();
-//            }
-//#endif // FEATURE_CRYPTO
+            m_hash1 = new SHA1CryptoServiceProvider();
+            m_hash2 = new SHA1CryptoServiceProvider();
 
             HashSizeValue = 160;
             base.InitializeKey(key);
-        }
-
-        internal static byte[] GenerateRandom(int keySize)
-        {
-            Random rnd = new Random();
-            byte[] key = new byte[keySize];
-            rnd.NextBytes(key);
-            return key;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Bytewizer.TinyCLR.Features;
 using Bytewizer.TinyCLR.Sockets.Channel;
+using FxSsh;
 
 namespace Bytewizer.TinyCLR.Terminal
 {
@@ -8,6 +9,8 @@ namespace Bytewizer.TinyCLR.Terminal
     /// </summary>
     public class ShellContext : TerminalContext
     {
+        private bool _active = true;
+
         /// <summary>
         /// Initializes an instance of the <see cref="ShellContext" /> class.
         /// </summary>
@@ -23,9 +26,18 @@ namespace Bytewizer.TinyCLR.Terminal
         public SocketChannel Channel { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="ShellSession"/> used to manage user session data for this request.
+        /// Get the state for this session.
         /// </summary>
-        public ShellSession Session { get; set; }
+        public override bool Active
+        {
+            get { return _active || Channel.Connected; }
+            set { _active = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Terminal.Session"/> used to manage user session data for this request.
+        /// </summary>
+        public Session Session { get; set; }
 
         /// <summary>
         /// Gets information about the underlying connection for this request.
@@ -42,7 +54,6 @@ namespace Bytewizer.TinyCLR.Terminal
             Request.Clear();
             Response.Clear();
             Channel.Clear();
-            
             Active = true;
         }
     }
