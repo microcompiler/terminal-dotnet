@@ -1,7 +1,4 @@
-﻿//using System.Diagnostics.Contracts;
-//using System.Security.Cryptography;
-
-using Bytewizer.TinyCLR.Security.Cryptography;
+﻿using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace FxSsh.Algorithms
 {
@@ -24,6 +21,11 @@ namespace FxSsh.Algorithms
 
         public override byte[] DecryptKeyExchange(byte[] exchangeData)
         {
+            if (exchangeData == null)
+            {
+                throw new ArgumentNullException(nameof(exchangeData));
+            }
+
             return _exchangeAlgorithm.DecryptKeyExchange(exchangeData);
         }
     }

@@ -9,7 +9,9 @@ namespace FxSsh.Messages.Connection
             base.OnLoad(reader);
 
             if (ChannelType != "session")
+            {
                 throw new ArgumentException(string.Format("Channel type {0} is not valid.", ChannelType));
+            }
         }
     }
 }

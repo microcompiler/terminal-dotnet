@@ -2,7 +2,6 @@
 
 namespace FxSsh.Messages.Userauth
 {
-    [Message("SSH_MSG_USERAUTH_SUCCESS", MessageNumber)]
     public class SuccessMessage : UserauthServiceMessage
     {
         private const byte MessageNumber = 52;

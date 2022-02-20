@@ -2,7 +2,6 @@
 
 namespace FxSsh.Algorithms
 {
-    [ContractClass(typeof(CompressionAlgorithmContract))]
     public abstract class CompressionAlgorithm
     {
         public abstract byte[] Compress(byte[] input);

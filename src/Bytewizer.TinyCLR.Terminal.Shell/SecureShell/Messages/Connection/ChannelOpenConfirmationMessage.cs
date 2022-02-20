@@ -1,7 +1,6 @@
 ﻿
 namespace FxSsh.Messages.Connection
 {
-    [Message("SSH_MSG_CHANNEL_OPEN_CONFIRMATION", MessageNumber)]
     public class ChannelOpenConfirmationMessage : ConnectionServiceMessage
     {
         private const byte MessageNumber = 91;

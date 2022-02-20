@@ -7,6 +7,9 @@ using System.IO;
 
 namespace Bytewizer.TinyCLR.Security.Cryptography
 {
+    /// <summary>
+    /// Represents the class from which all implementations of cryptographic hash algorithms must derive.
+    /// </summary>
     public abstract class HashAlgorithm : IDisposable, ICryptoTransform
     {
         protected int HashSizeValue;
@@ -17,15 +20,18 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
 
         protected HashAlgorithm() { }
 
-        //
-        // public properties
-        //
 
+        /// <summary>
+        /// Gets the size, in bits, of the computed hash code.
+        /// </summary>
         public virtual int HashSize
         {
             get { return HashSizeValue; }
         }
 
+        /// <summary>
+        /// Gets the value of the computed hash code.
+        /// </summary>
         public virtual byte[] Hash
         {
             get
@@ -43,6 +49,11 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             return new SHA1CryptoServiceProvider();
         }
 
+        /// <summary>
+        /// Computes the hash value for the specified Stream object.
+        /// </summary>
+        /// <param name="inputStream">The input to compute the hash code for.</param>
+        /// <returns>The computed hash code.</returns>
         public byte[] ComputeHash(Stream inputStream)
         {
             if (m_bDisposed)
@@ -66,6 +77,11 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             return (Tmp);
         }
 
+        /// <summary>
+        /// Computes the hash value for the specified byte array.
+        /// </summary>
+        /// <param name="buffer">The input to compute the hash code for.</param>
+        /// <returns>The computed hash code.</returns>
         public byte[] ComputeHash(byte[] buffer)
         {
             if (m_bDisposed)
@@ -81,6 +97,13 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             return (Tmp);
         }
 
+        /// <summary>
+        /// Computes the hash value for the specified region of the specified byte array.
+        /// </summary>
+        /// <param name="buffer">The input to compute the hash code for.</param>
+        /// <param name="offset">The offset into the byte array from which to begin using data.</param>
+        /// <param name="count">The number of bytes in the array to use as data.</param>
+        /// <returns>The computed hash code.</returns>
         public byte[] ComputeHash(byte[] buffer, int offset, int count)
         {
             // Do some validation
@@ -103,31 +126,47 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             Initialize();
             return (Tmp);
         }
-
-        // ICryptoTransform methods
-
-        // we assume any HashAlgorithm can take input a byte at a time
+        /// <summary>
+        /// When overridden in a derived class, gets the input block size.
+        /// </summary>
         public virtual int InputBlockSize
         {
             get { return (1); }
         }
 
+        /// <summary>
+        /// When overridden in a derived class, gets the output block size.
+        /// </summary>
         public virtual int OutputBlockSize
         {
             get { return (1); }
         }
 
+        /// <summary>
+        /// When overridden in a derived class, gets a value indicating whether multiple blocks can be transformed.
+        /// </summary>
         public virtual bool CanTransformMultipleBlocks
         {
             get { return (true); }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the current transform can be reused.
+        /// </summary>
         public virtual bool CanReuseTransform
         {
             get { return (true); }
         }
 
-        // We implement TransformBlock and TransformFinalBlock here
+        /// <summary>
+        /// Computes the hash value for the specified region of the input byte array and copies the specified region of the input byte array to the specified region of the output byte array.
+        /// </summary>
+        /// <param name="inputBuffer">The input to compute the hash code for.</param>
+        /// <param name="inputOffset">The offset into the input byte array from which to begin using data.</param>
+        /// <param name="inputCount">The number of bytes in the input byte array to use as data.</param>
+        /// <param name="outputBuffer">A copy of the part of the input array used to compute the hash code.</param>
+        /// <param name="outputOffset">The offset into the output byte array from which to begin writing data.</param>
+        /// <returns>The number of bytes written.</returns>
         public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
         {
             // Do some validation, we let BlockCopy do the destination array validation
@@ -152,6 +191,13 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             return inputCount;
         }
 
+        /// <summary>
+        /// Computes the hash value for the specified region of the specified byte array.
+        /// </summary>
+        /// <param name="inputBuffer">The input to compute the hash code for.</param>
+        /// <param name="inputOffset">The offset into the byte array from which to begin using data.</param>
+        /// <param name="inputCount">The number of bytes in the byte array to use as data.</param>
+        /// <returns>An array that is a copy of the part of the input that is hashed.</returns>
         public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
         {
             // Do some validation
@@ -218,6 +264,9 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             }
         }
 
+        /// <summary>
+        /// Initializes an implementation of the HashAlgorithm class.
+        /// </summary>
         public abstract void Initialize();
 
         protected abstract void HashCore(byte[] array, int ibStart, int cbSize);

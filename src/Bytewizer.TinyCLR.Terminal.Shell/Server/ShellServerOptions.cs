@@ -3,6 +3,7 @@ using System.Collections;
 using System.Reflection;
 
 using Bytewizer.TinyCLR.Sockets;
+using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace Bytewizer.TinyCLR.Terminal
 {
@@ -25,7 +26,7 @@ namespace Bytewizer.TinyCLR.Terminal
             Assemblies = AppDomain.CurrentDomain.GetAssemblies();
         }
 
-        public void AddHostKeys(string type, string parameters)
+        public void HostKey(string type, RSAParameters parameters)
         {
             if (!_hostKey.ContainsKey(type))
             {

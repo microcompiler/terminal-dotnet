@@ -1,6 +1,4 @@
 ﻿using System;
-//using System.Diagnostics.Contracts;
-//using System.Security.Cryptography;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 

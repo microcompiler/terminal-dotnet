@@ -1,7 +1,4 @@
-﻿//using System.Diagnostics.Contracts;
-//using System.Security.Cryptography;
-
-using Bytewizer.TinyCLR.Security.Cryptography;
+﻿using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace FxSsh.Algorithms
 {

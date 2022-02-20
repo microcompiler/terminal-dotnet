@@ -1,7 +1,6 @@
 ﻿
 namespace FxSsh.Messages.Connection
 {
-    [Message("SSH_MSG_CHANNEL_EOF", MessageNumber)]
     public class ChannelEofMessage : ConnectionServiceMessage
     {
         private const byte MessageNumber = 96;

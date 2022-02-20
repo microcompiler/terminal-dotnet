@@ -4,7 +4,6 @@ using System.Text;
 
 namespace FxSsh.Messages
 {
-    [Message("SSH_MSG_DISCONNECT", MessageNumber)]
     public class DisconnectMessage : Message
     {
         private const byte MessageNumber = 1;

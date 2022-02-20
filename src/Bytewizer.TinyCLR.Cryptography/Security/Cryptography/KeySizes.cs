@@ -3,8 +3,17 @@
 
 namespace Bytewizer.TinyCLR.Security.Cryptography
 {
+    /// <summary>
+    /// Determines the set of valid key sizes for the symmetric cryptographic algorithms.
+    /// </summary>
     public sealed class KeySizes
     {
+        /// <summary>
+        /// Initializes a new instance of the KeySizes class with the specified key values.
+        /// </summary>
+        /// <param name="minSize">The minimum valid key size.</param>
+        /// <param name="maxSize">The maximum valid key size.</param>
+        /// <param name="skipSize">The interval between valid key sizes.</param>
         public KeySizes(int minSize, int maxSize, int skipSize)
         {
             MinSize = minSize;
@@ -12,8 +21,19 @@ namespace Bytewizer.TinyCLR.Security.Cryptography
             SkipSize = skipSize;
         }
 
+        /// <summary>
+        /// Specifies the minimum key size in bits.
+        /// </summary>
         public int MinSize { get; private set; }
+
+        /// <summary>
+        /// Specifies the maximum key size in bits.
+        /// </summary>
         public int MaxSize { get; private set; }
+
+        /// <summary>
+        /// Specifies the interval between valid key sizes in bits.
+        /// </summary>
         public int SkipSize { get; private set; }
 
         internal bool IsLegal(int keySize)

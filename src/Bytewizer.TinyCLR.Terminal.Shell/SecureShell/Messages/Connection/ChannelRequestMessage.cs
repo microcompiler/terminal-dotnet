@@ -2,7 +2,6 @@
 
 namespace FxSsh.Messages.Connection
 {
-    [Message("SSH_MSG_CHANNEL_REQUEST", MessageNumber)]
     public class ChannelRequestMessage : ConnectionServiceMessage
     {
         private const byte MessageNumber = 98;

@@ -1,12 +1,10 @@
 ﻿using System;
-//using System.Security.Cryptography;
 using System.Text;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace FxSsh.Messages
 {
-    [Message("SSH_MSG_KEXINIT", MessageNumber)]
     public class KeyExchangeInitMessage : Message
     {
         private const byte MessageNumber = 20;

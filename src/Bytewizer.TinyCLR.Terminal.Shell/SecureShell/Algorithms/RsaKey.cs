@@ -1,7 +1,6 @@
 ﻿using System.Text;
 
-using System.Security.Cryptography;
-//using Bytewizer.TinyCLR.Security.Cryptography;
+using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace FxSsh.Algorithms
 {
@@ -9,8 +8,8 @@ namespace FxSsh.Algorithms
     {
         private readonly RSACryptoServiceProvider _algorithm = new RSACryptoServiceProvider();
 
-        public RsaKey(string key = null)
-            : base(key)
+        public RsaKey(RSAParameters parameters = new RSAParameters())
+            : base(parameters)
         { }
 
         public override string Name
@@ -18,18 +17,23 @@ namespace FxSsh.Algorithms
             get { return "ssh-rsa"; }
         }
 
-        public override void ImportKey(byte[] bytes)
+        public override void ImportKey(RSAParameters parameters)
         {
-            _algorithm.ImportCspBlob(bytes);
+            _algorithm.ImportParameters(parameters);
         }
 
-        public override byte[] ExportKey()
+        public override RSAParameters ExportKey()
         {
-            return _algorithm.ExportCspBlob(true);
+            return _algorithm.ExportParameters(true);
         }
 
         public override void LoadKeyAndCertificatesData(byte[] data)
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             using (var worker = new SshDataWorker(data))
             {
                 if (worker.ReadString(Encoding.ASCII) != this.Name)
@@ -59,22 +63,56 @@ namespace FxSsh.Algorithms
 
         public override bool VerifyData(byte[] data, byte[] signature)
         {
-            return _algorithm.VerifyData(data, "SHA1", signature);
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            if (signature == null)
+            {
+                throw new ArgumentNullException(nameof(signature));
+            }
+
+            throw new NotImplementedException();
+            //return _algorithm.VerifyData(data, "SHA1", signature);
         }
 
         public override bool VerifyHash(byte[] hash, byte[] signature)
         {
-            return _algorithm.VerifyHash(hash, "SHA1", signature);
+            if (hash == null)
+            {
+                throw new ArgumentNullException(nameof(hash));
+            }
+
+            if (signature == null)
+            {
+                throw new ArgumentNullException(nameof(signature));
+            }
+
+            throw new NotImplementedException();
+            //return _algorithm.VerifyHash(hash, "SHA1", signature);
         }
 
         public override byte[] SignData(byte[] data)
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            //throw new NotImplementedException();
             return _algorithm.SignData(data, "SHA1");
         }
 
         public override byte[] SignHash(byte[] hash)
         {
-            return _algorithm.SignHash(hash, "1.3.14.3.2.29");
+            if (hash == null)
+            {
+                throw new ArgumentNullException(nameof(hash));
+            }
+
+            throw new NotImplementedException();
+            //return _algorithm.SignHash(hash, "1.3.14.3.2.29");
         }
     }
 }

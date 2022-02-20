@@ -4,11 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Bytewizer.TinyCLR.Core\Bytewizer.CLR.Core.csproj" />
     <ProjectReference Include="..\Bytewizer.TinyCLR.Numerics\Bytewizer.CLR.Numerics.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Security\RSA\" />
   </ItemGroup>
 
 </Project>

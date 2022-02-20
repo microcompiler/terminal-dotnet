@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
-//using System.Security.Cryptography;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace FxSsh.Algorithms
 {
-    [ContractClass(typeof(PublicKeyAlgorithmContract))]
     public abstract class PublicKeyAlgorithm
     {
-        public PublicKeyAlgorithm(string key)
+        public PublicKeyAlgorithm(RSAParameters parameters)
         {
-            if (!string.IsNullOrEmpty(key))
-            {
-                var bytes = Convert.FromBase64String(key);
-                ImportKey(bytes);
-            }
+            ImportKey(parameters);
         }
 
         public abstract string Name { get; }
@@ -46,7 +40,10 @@ namespace FxSsh.Algorithms
 
         public byte[] CreateSignatureData(byte[] data)
         {
-            Contract.Requires(data != null);
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
 
             using (var worker = new SshDataWorker())
             {
@@ -59,9 +56,9 @@ namespace FxSsh.Algorithms
             }
         }
 
-        public abstract void ImportKey(byte[] bytes);
+        public abstract void ImportKey(RSAParameters parameters);
 
-        public abstract byte[] ExportKey();
+        public abstract RSAParameters ExportKey();
 
         public abstract void LoadKeyAndCertificatesData(byte[] data);
 

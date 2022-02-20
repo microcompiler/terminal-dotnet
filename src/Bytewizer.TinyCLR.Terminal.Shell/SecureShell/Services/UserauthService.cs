@@ -3,6 +3,9 @@ using FxSsh.Messages.Userauth;
 using System;
 using System.Diagnostics.Contracts;
 
+using Bytewizer.TinyCLR.Security.Cryptography;
+
+
 namespace FxSsh.Services
 {
     public class UserauthService : SshService, IDynamicInvoker
@@ -79,7 +82,7 @@ namespace FxSsh.Services
             {
                 var verifed = false;
 
-                var keyAlg = Session._publicKeyAlgorithms[message.KeyAlgorithmName](null);
+                var keyAlg = Session._publicKeyAlgorithms[message.KeyAlgorithmName](new RSAParameters());
                 keyAlg.LoadKeyAndCertificatesData(message.PublicKey);
 
                 var args = new UserauthArgs(base._session, message.Username, message.KeyAlgorithmName, keyAlg.GetFingerprint(), message.PublicKey);

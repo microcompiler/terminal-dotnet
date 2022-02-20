@@ -3,7 +3,6 @@ using System.Text;
 
 namespace FxSsh.Messages.Connection
 {
-    [Message("SSH_MSG_CHANNEL_OPEN", MessageNumber)]
     public class ChannelOpenMessage : ConnectionServiceMessage
     {
         private const byte MessageNumber = 90;

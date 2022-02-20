@@ -2,7 +2,6 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-//using System.Security.Cryptography;
 using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace FxSsh.Algorithms

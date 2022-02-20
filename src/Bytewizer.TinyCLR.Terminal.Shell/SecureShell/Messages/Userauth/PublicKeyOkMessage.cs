@@ -3,7 +3,6 @@ using System.Text;
 
 namespace FxSsh.Messages.Userauth
 {
-    [Message("SSH_MSG_USERAUTH_PK_OK", MessageNumber)]
     public class PublicKeyOkMessage : UserauthServiceMessage
     {
         private const byte MessageNumber = 60;

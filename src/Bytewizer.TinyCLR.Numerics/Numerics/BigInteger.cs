@@ -2079,7 +2079,6 @@ namespace Bytewizer.TinyCLR.Numerics
             return right;
         }
 
-
         public static BigInteger Max(BigInteger left, BigInteger right)
         {
             int ls = left.sign;

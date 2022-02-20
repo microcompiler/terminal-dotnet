@@ -1,5 +1,4 @@
 ﻿using Bytewizer.TinyCLR.Logging;
-//using System.Security.Cryptography;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
@@ -15,6 +14,9 @@ using Bytewizer.TinyCLR.Terminal;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System;
+using System.Diagnostics;
+using FxSsh.Messages.Userauth;
+using FxSsh.Messages.Connection;
 
 namespace FxSsh
 {
@@ -31,13 +33,14 @@ namespace FxSsh
         internal const int LocalChannelDataPacketSize = 1024 * 32;
 
         private static readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create(); // new RNGCryptoServiceProvider();
-        private static readonly Dictionary<byte, Type> _messagesMetadata;
-        
-        
+        //private static readonly Dictionary<byte, Type> _messagesMetadata;
+        private static readonly Hashtable _messagesMetadata;
+
+
         internal static readonly Dictionary<string, Func<KexAlgorithm>> _keyExchangeAlgorithms =
             new Dictionary<string, Func<KexAlgorithm>>();
-        internal static readonly Dictionary<string, Func<string, PublicKeyAlgorithm>> _publicKeyAlgorithms =
-            new Dictionary<string, Func<string, PublicKeyAlgorithm>>();
+        internal static readonly Dictionary<string, Func<RSAParameters, PublicKeyAlgorithm>> _publicKeyAlgorithms =
+            new Dictionary<string, Func<RSAParameters, PublicKeyAlgorithm>>();
         internal static readonly Dictionary<string, Func<CipherInfo>> _encryptionAlgorithms =
             new Dictionary<string, Func<CipherInfo>>();
         internal static readonly Dictionary<string, Func<HmacInfo>> _hmacAlgorithms =
@@ -80,7 +83,6 @@ namespace FxSsh
             _keyExchangeAlgorithms.Add("diffie-hellman-group1-sha1", () => new DiffieHellmanGroupSha1(new DiffieHellman(1024)));
 
             _publicKeyAlgorithms.Add("ssh-rsa", x => new RsaKey(x));
-            //_publicKeyAlgorithms.Add("ssh-dss", x => new DssKey(x));
 
             _encryptionAlgorithms.Add("aes128-ctr", () => new CipherInfo(new AESCryptoServiceProvider(), 128, CipherModeEx.CTR));
             _encryptionAlgorithms.Add("aes192-ctr", () => new CipherInfo(new AESCryptoServiceProvider(), 192, CipherModeEx.CTR));
@@ -88,18 +90,78 @@ namespace FxSsh
             _encryptionAlgorithms.Add("aes128-cbc", () => new CipherInfo(new AESCryptoServiceProvider(), 128, CipherModeEx.CBC));
             _encryptionAlgorithms.Add("aes192-cbc", () => new CipherInfo(new AESCryptoServiceProvider(), 192, CipherModeEx.CBC));
             _encryptionAlgorithms.Add("aes256-cbc", () => new CipherInfo(new AESCryptoServiceProvider(), 256, CipherModeEx.CBC));
-            //_encryptionAlgorithms.Add("3des-cbc", () => new CipherInfo(new TripleDESCryptoServiceProvider(), 192, CipherModeEx.CBC));
 
             _hmacAlgorithms.Add("hmac-md5", () => new HmacInfo(new HMACMD5(), 128));
             _hmacAlgorithms.Add("hmac-sha1", () => new HmacInfo(new HMACSHA1(), 160));
 
             _compressionAlgorithms.Add("none", () => new NoCompression());
 
-            _messagesMetadata = (from t in typeof(Message).Assembly.GetTypes()
-                                 let attrib = (MessageAttribute)t.GetCustomAttributes(typeof(MessageAttribute), false).FirstOrDefault()
-                                 where attrib != null
-                                 select new { attrib.Number, Type = t })
-                                 .ToDictionary(x => x.Number, x => x.Type);
+            _messagesMetadata = new Hashtable() 
+            { 
+                { (byte)1, typeof(DisconnectMessage) },
+                { (byte)30, typeof(KeyExchangeDhInitMessage) },
+                { (byte)31, typeof(KeyExchangeDhReplyMessage) },
+                { (byte)20, typeof(KeyExchangeInitMessage) },
+                { (byte)21, typeof(NewKeysMessage) },
+                { (byte)6, typeof(ServiceAcceptMessage) },
+                { (byte)5, typeof(ServiceRequestMessage) },
+                { (byte)3, typeof(UnimplementedMessage) },
+                { (byte)51, typeof(FailureMessage) },
+                { (byte)60, typeof(PublicKeyOkMessage) },
+                { (byte)50, typeof(RequestMessage) },
+                { (byte)52, typeof(SuccessMessage) },
+                { (byte)97, typeof(ChannelCloseMessage) },
+                { (byte)94, typeof(ChannelDataMessage) },
+                { (byte)96, typeof(ChannelEofMessage) },
+                { (byte)100, typeof(ChannelFailureMessage) },
+                { (byte)91, typeof(ChannelOpenConfirmationMessage) },
+                { (byte)92, typeof(ChannelOpenFailureMessage) },
+                { (byte)90, typeof(ChannelOpenMessage) },
+                { (byte)98, typeof(ChannelRequestMessage) },
+                { (byte)99, typeof(ChannelSuccessMessage) },
+                { (byte)93, typeof(ChannelWindowAdjustMessage) },
+                { (byte)2, typeof(ShouldIgnoreMessage) },
+            };
+
+
+            //_messagesMetadata = (from t in typeof(Message).Assembly.GetTypes()
+            //                     let attrib = (MessageAttribute)t.GetCustomAttributes(typeof(MessageAttribute), false).FirstOrDefault()
+            //                     where attrib != null
+            //                     select new { attrib.Number, Type = t })
+            //                     .ToDictionary(x => x.Number, x => x.Type);
+
+            //foreach (var message in _messagesMetadata)
+            //{
+            //    Debug.WriteLine($"{{ (byte){message.Key}, typeof({message.Value.Name}) }},");
+            //}
+
+            //var tom = new Hashtable()
+            //{
+            //    { 1, "FxSsh.Messages.DisconnectMessage" },
+            //    { 30, "FxSsh.Messages.KeyExchangeDhInitMessage" },
+            //    { 31, "FxSsh.Messages.KeyExchangeDhReplyMessage" },
+            //    { 20, "FxSsh.Messages.KeyExchangeInitMessage" },
+            //    { 21, "FxSsh.Messages.NewKeysMessage" },
+            //    { 6, "FxSsh.Messages.ServiceAcceptMessage" },
+            //    { 5, "FxSsh.Messages.ServiceRequestMessage" },
+            //    { 3, "FxSsh.Messages.UnimplementedMessage" },
+            //    { 51, "FxSsh.Messages.Userauth.FailureMessage" },
+            //    { 60, "FxSsh.Messages.Userauth.PublicKeyOkMessage" },
+            //    { 50, "FxSsh.Messages.Userauth.RequestMessage" },
+            //    { 52, "FxSsh.Messages.Userauth.SuccessMessage" },
+            //    { 97, "FxSsh.Messages.Connection.ChannelCloseMessage" },
+            //    { 94, "FxSsh.Messages.Connection.ChannelDataMessage" },
+            //    { 96, "FxSsh.Messages.Connection.ChannelEofMessage" },
+            //    { 100, "FxSsh.Messages.Connection.ChannelFailureMessage" },
+            //    { 91, "FxSsh.Messages.Connection.ChannelOpenConfirmationMessage" },
+            //    { 92, "FxSsh.Messages.Connection.ChannelOpenFailureMessage" },
+            //    { 90, "FxSsh.Messages.Connection.ChannelOpenMessage" },
+            //    { 98, "FxSsh.Messages.Connection.ChannelRequestMessage" },
+            //    { 99, "FxSsh.Messages.Connection.ChannelSuccessMessage" },
+            //    { 93, "FxSsh.Messages.Connection.ChannelWindowAdjustMessage" },
+            //    { 2, "FxSsh.Messages.Connection.ShouldIgnoreMessage" },
+            //};
+            ////tom.Add()
         }
 
         public Session(
@@ -419,7 +481,7 @@ namespace FxSsh
             var typeNumber = data[0];
             var implemented = _messagesMetadata.ContainsKey(typeNumber);
             var message = implemented
-                ? (Message)Activator.CreateInstance(_messagesMetadata[typeNumber])
+                ? (Message)Activator.CreateInstance((Type)_messagesMetadata[typeNumber])
                 : new UnknownMessage { SequenceNumber = _inboundPacketSequence, UnknownMessageType = typeNumber };
 
             if (implemented)
@@ -624,7 +686,7 @@ namespace FxSsh
         private void HandleMessage(KeyExchangeDhInitMessage message)
         {
             var kexAlg = _keyExchangeAlgorithms[_exchangeContext.KeyExchange]();
-            var hostKeyAlg = _publicKeyAlgorithms[_exchangeContext.PublicKey](_shellOptions.HostKeys[_exchangeContext.PublicKey].ToString());
+            var hostKeyAlg = _publicKeyAlgorithms[_exchangeContext.PublicKey]((RSAParameters)_shellOptions.HostKeys[_exchangeContext.PublicKey]);
             var clientCipher = _encryptionAlgorithms[_exchangeContext.ClientEncryption]();
             var serverCipher = _encryptionAlgorithms[_exchangeContext.ServerEncryption]();
             var serverHmac = _hmacAlgorithms[_exchangeContext.ServerHmac]();

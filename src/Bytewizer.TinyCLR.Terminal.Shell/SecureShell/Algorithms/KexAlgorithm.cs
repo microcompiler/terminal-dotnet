@@ -1,11 +1,9 @@
 ﻿using System.Diagnostics.Contracts;
-//using System.Security.Cryptography;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace FxSsh.Algorithms
 {
-    [ContractClass(typeof(KexAlgorithmContract))]
     public abstract class KexAlgorithm
     {
         protected HashAlgorithm _hashAlgorithm;
@@ -16,7 +14,10 @@ namespace FxSsh.Algorithms
 
         public byte[] ComputeHash(byte[] input)
         {
-            Contract.Requires(input != null);
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
 
             return _hashAlgorithm.ComputeHash(input);
         }

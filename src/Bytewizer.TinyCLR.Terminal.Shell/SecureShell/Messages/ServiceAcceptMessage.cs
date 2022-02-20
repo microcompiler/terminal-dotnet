@@ -3,7 +3,6 @@ using System.Text;
 
 namespace FxSsh.Messages
 {
-    [Message("SSH_MSG_SERVICE_ACCEPT", MessageNumber)]
     public class ServiceAcceptMessage : Message
     {
         private const byte MessageNumber = 6;

@@ -1,7 +1,6 @@
 ﻿using FxSsh.Algorithms;
 using System;
 using System.Diagnostics.Contracts;
-//using System.Security.Cryptography;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
@@ -29,20 +28,21 @@ namespace FxSsh
             {
                 case "ssh-rsa":
                     return new RsaKey();
-                case "ssh-dss":
-                    return new DssKey();
+                //case "ssh-dss":
+                //    return new DssKey();
                 default:
                     throw new ArgumentOutOfRangeException("type");
             }
         }
 
-        public static string GeneratePrivateKey(string type)
+        public static RSAParameters GeneratePrivateKey(string type)
         {
             Contract.Requires(type != null);
 
             var alg = GetKeyAlgorithm(type);
-            var bytes = alg.ExportKey();
-            return Convert.ToBase64String(bytes);
+            //var bytes = alg.ExportKey();
+            //return Convert.ToBase64String(bytes);
+            return alg.ExportKey();
         }
 
         public static string[] SupportedAlgorithms
