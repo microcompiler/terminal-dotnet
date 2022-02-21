@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Diagnostics;
+using System.Collections;
 
 using Bytewizer.TinyCLR.Logging;
 using Bytewizer.TinyCLR.Pipeline;
@@ -8,18 +9,17 @@ using Bytewizer.TinyCLR.SecureShell;
 using Bytewizer.TinyCLR.SecureShell.Services;
 
 using MiniTerm;
-using System.Diagnostics;
 
 namespace Bytewizer.TinyCLR.Terminal
 {
     internal class ShellMiddleware : Middleware
     {
-        private static int windowWidth, windowHeight;
+        private ShellContext _ctx;
 
         private readonly ILogger _logger;
         private readonly ShellServerOptions _shellOptions;
         private readonly EndpointProvider _endpointProvider;
-
+        
         public ShellMiddleware(ILogger logger, ShellServerOptions options)
         {
             _logger = logger;
@@ -29,7 +29,7 @@ namespace Bytewizer.TinyCLR.Terminal
 
         protected override void Invoke(ITerminalContext context, RequestDelegate next)
         {
-            ShellContext ctx = context as ShellContext;
+            _ctx = context as ShellContext;
 
             // Set features objects
             var sessionFeature = new SessionFeature();
@@ -39,23 +39,7 @@ namespace Bytewizer.TinyCLR.Terminal
             context.Features.Set(typeof(EndpointFeature), endpointFeature);
 
             // Set network connection timeout
-            ctx.Channel.InputStream.ReadTimeout = _shellOptions.ConnectionTimeout;
-
-            // Validate SSH protocol version
-            //if (ValidateHandshakeVersion(ctx, out string clientProtocol))
-            //{
-            //    var secureShellFeature = new SecureShellFeature();
-            //    secureShellFeature.ClientProtocol = clientProtocol;
-
-            //    context.Features.Set(typeof(SecureShellFeature), secureShellFeature);
-            //    _logger.HandshakeSucceeded(clientProtocol);
-            //}
-            //else
-            //{
-            //    // Exit and close connection
-            //    _logger.HandshakeFailed(clientProtocol);
-            //    return;
-            //}
+            _ctx.Channel.InputStream.ReadTimeout = _shellOptions.ConnectionTimeout;
 
             next(context);
 
@@ -69,23 +53,24 @@ namespace Bytewizer.TinyCLR.Terminal
 
             endpointFeature.AvailableCommands = _endpointProvider.GetCommands();
 
-            ctx.Session = new ShellSession(_logger, ctx, _shellOptions);
-            ctx.Session.KeysExchanged += KeysExchanged;
-            ctx.Session.ServiceRegistered += ServiceRegistered;
-           
-            ctx.Session.EstablishConnection();
+            _ctx.Session = new ShellSession(_logger, _ctx, _shellOptions);
+            _ctx.Session.KeysExchanged += KeysExchanged;
+            _ctx.Session.ServiceRegistered += ServiceRegistered;        
+            _ctx.Session.EstablishConnection();
         }
 
         private void KeysExchanged(object sender, KeyExchangeArgs args)
         {
-
+            foreach (var keyExchangeAlg in args.KeyExchangeAlgorithms)
+            {
+                Debug.WriteLine($"Key exchange algorithm: {keyExchangeAlg}");
+            }
         }
 
         private void ServiceRegistered(object sender, SshService e)
         {
             var session = (ShellSession)sender;
-            Console.WriteLine("Session {0} requesting {1}.",
-            BitConverter.ToString(session.SessionId).Replace("-", ""), e.GetType().Name);
+            Debug.WriteLine($"Session {BitConverter.ToString(session.SessionId).Replace("-", "")} requesting {e.GetType().Name}.");
 
             if (e is UserauthService)
             {
@@ -102,30 +87,38 @@ namespace Bytewizer.TinyCLR.Terminal
             }
         }
 
-        static void Userauth(object sender, UserauthArgs args)
+        private void Userauth(object sender, UserauthArgs args)
         {
-            Console.WriteLine("Client {0} fingerprint: {1}.", args.KeyAlgorithm, args.Fingerprint);         
+            Debug.WriteLine("Client {0} fingerprint: {1}.", args.KeyAlgorithm, args.Fingerprint);         
             args.Result = true;
         }
 
-        static void PtyReceived(object sender, PtyArgs args)
+        private void PtyReceived(object sender, PtyArgs args)
         {
-            Console.WriteLine("Request to create a PTY received for terminal type {0}", args.Terminal);
-            windowWidth = (int)args.WidthChars;
-            windowHeight = (int)args.HeightRows;
+            Debug.WriteLine($"Request to create a PTY received for terminal type {args.Terminal}");
+            _ctx.Options.TerminalType = args.Terminal;
+            _ctx.Options.Modes = args.Modes;
+            _ctx.Options.Width  = args.WidthColumns;
+            _ctx.Options.WidthPixels = args.WidthPixels;
+            _ctx.Options.Height = args.HeightRows;
+            _ctx.Options.HeightPixels = args.HeightPixels;
         }
 
-        static void WindowChange(object sender, WindowChangeArgs args)
+        private void WindowChange(object sender, WindowChangeArgs args)
         {
-            Debug.WriteLine(args.WidthColumns);
+            Debug.WriteLine($"Windows change requst Width-{args.WidthColumns} Height-{args.HeightRows}");
+            _ctx.Options.Width = args.WidthColumns;
+            _ctx.Options.WidthPixels = args.WidthPixels;
+            _ctx.Options.Height = args.HeightRows;
+            _ctx.Options.HeightPixels = args.HeightPixels;
         }
 
-        static void EnvReceived(object sender, EnvironmentArgs args)
+        private void EnvReceived(object sender, EnvironmentArgs args)
         {
             Console.WriteLine("Received environment variable {0}:{1}", args.Name, args.Value);
         }
 
-        static void CommandOpened(object sender, CommandRequestedArgs args)
+        private void CommandOpened(object sender, CommandRequestedArgs args)
         {
             Console.WriteLine($"Channel {args.Channel.ServerChannelId} runs {args.ShellType}: \"{args.CommandText}\".");
 
@@ -140,7 +133,7 @@ namespace Bytewizer.TinyCLR.Terminal
             {
                 // requirements: Windows 10 RedStone 5, 1809
                 // also, you can call powershell.exe
-                var terminal = new MiniTerminal("cmd.exe", windowWidth, windowHeight);
+                var terminal = new MiniTerminal("cmd.exe", (int)_ctx.Options.Width, (int)_ctx.Options.Height);
 
                 args.Channel.DataReceived += (ss, ee) => terminal.OnInput(ee);
                 args.Channel.CloseReceived += (ss, ee) => terminal.OnClose();

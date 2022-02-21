@@ -2,7 +2,7 @@
 {
     public class PtyArgs
     {
-        public PtyArgs(SessionChannel channel, string terminal, uint heightPx, uint heightRows, uint widthPx, uint widthChars, string modes, UserauthArgs userauthArgs)
+        public PtyArgs(SessionChannel channel, string terminal, uint heightPixels, uint heightRows, uint widthPixels, uint widthColumns, string modes, UserauthArgs userauthArgs)
         {
             if (channel == null)
             {
@@ -25,10 +25,10 @@
 
             Channel = channel;
             Terminal = terminal;
-            HeightPx = heightPx;
+            HeightPixels = heightPixels;
             HeightRows = heightRows;
-            WidthPx = widthPx;
-            WidthChars = widthChars;
+            WidthPixels = widthPixels;
+            WidthColumns = widthColumns;
             Modes = modes;
 
             AttachedUserauthArgs = userauthArgs;
@@ -36,10 +36,10 @@
 
         public SessionChannel Channel { get; private set; }
         public string Terminal { get; private set; }
-        public uint HeightPx { get; private set; }
+        public uint HeightPixels { get; private set; }
         public uint HeightRows { get; private set; }
-        public uint WidthPx { get; private set; }
-        public uint WidthChars { get; private set; }
+        public uint WidthPixels { get; private set; }
+        public uint WidthColumns { get; private set; }
         public string Modes { get; private set; }
         public UserauthArgs AttachedUserauthArgs { get; private set; }
     }
