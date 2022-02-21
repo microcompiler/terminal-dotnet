@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
-using System.Diagnostics.Contracts;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
-namespace FxSsh.Algorithms
+namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
     public abstract class PublicKeyAlgorithm
     {
@@ -20,13 +19,16 @@ namespace FxSsh.Algorithms
             using (var md5 = MD5.Create())
             {
                 var bytes = md5.ComputeHash(CreateKeyAndCertificatesData());
-                return BitConverter.ToString(bytes).Replace('-', ':');
+                return BitConverter.ToString(bytes).Replace("-", ":");
             }
         }
 
         public byte[] GetSignature(byte[] signatureData)
         {
-            Contract.Requires(signatureData != null);
+            if (signatureData == null)
+            {
+                throw new ArgumentNullException(nameof(signatureData));
+            }
 
             using (var worker = new SshDataWorker(signatureData))
             {

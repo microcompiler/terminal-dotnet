@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FxSsh.Messages.Userauth
+namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
     public class SuccessMessage : UserauthServiceMessage
     {

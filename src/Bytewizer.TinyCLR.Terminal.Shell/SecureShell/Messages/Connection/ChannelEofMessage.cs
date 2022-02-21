@@ -1,5 +1,4 @@
-﻿
-namespace FxSsh.Messages.Connection
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class ChannelEofMessage : ConnectionServiceMessage
     {

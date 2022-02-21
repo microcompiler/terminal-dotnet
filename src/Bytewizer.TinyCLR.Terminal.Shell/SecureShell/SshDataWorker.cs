@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 
-namespace FxSsh
+namespace Bytewizer.TinyCLR.SecureShell
 {
     public class SshDataWorker : IDisposable
     {

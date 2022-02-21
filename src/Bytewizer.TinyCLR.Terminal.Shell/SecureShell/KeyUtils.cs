@@ -1,28 +1,33 @@
-﻿using FxSsh.Algorithms;
-using System;
-using System.Diagnostics.Contracts;
+﻿using System;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
+using Bytewizer.TinyCLR.SecureShell.Algorithms;
 
-namespace FxSsh
+namespace Bytewizer.TinyCLR.SecureShell
 {
     public static class KeyUtils
     {
         public static string GetFingerprint(string sshkey)
         {
-            Contract.Requires(sshkey != null);
+            if (sshkey == null)
+            {
+                throw new ArgumentNullException(nameof(sshkey));
+            }
 
             using (var md5 = MD5.Create())
             {
                 var bytes = Convert.FromBase64String(sshkey);
                 bytes = md5.ComputeHash(bytes);
-                return BitConverter.ToString(bytes).Replace('-', ':');
+                return BitConverter.ToString(bytes).Replace("-", ":");
             }
         }
 
         private static PublicKeyAlgorithm GetKeyAlgorithm(string type)
         {
-            Contract.Requires(type != null);
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
 
             switch (type)
             {
@@ -37,7 +42,10 @@ namespace FxSsh
 
         public static RSAParameters GeneratePrivateKey(string type)
         {
-            Contract.Requires(type != null);
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
 
             var alg = GetKeyAlgorithm(type);
             //var bytes = alg.ExportKey();

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace FxSsh.Services
+namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public abstract class SshService
     {

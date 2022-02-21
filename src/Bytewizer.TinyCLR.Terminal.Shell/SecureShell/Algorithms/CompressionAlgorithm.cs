@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace FxSsh.Algorithms
+﻿namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
     public abstract class CompressionAlgorithm
     {

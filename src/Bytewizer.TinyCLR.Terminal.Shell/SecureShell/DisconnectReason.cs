@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace FxSsh
+namespace Bytewizer.TinyCLR.SecureShell
 {
     public enum DisconnectReason
     {

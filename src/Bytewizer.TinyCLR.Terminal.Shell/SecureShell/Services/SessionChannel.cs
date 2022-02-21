@@ -1,5 +1,5 @@
 ﻿
-namespace FxSsh.Services
+namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class SessionChannel : Channel
     {

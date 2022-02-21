@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
-namespace FxSsh.Algorithms
+namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
     public class CtrModeCryptoTransform : ICryptoTransform
     {
@@ -13,7 +13,10 @@ namespace FxSsh.Algorithms
 
         public CtrModeCryptoTransform(SymmetricAlgorithm algorithm)
         {
-            Contract.Requires(algorithm != null);
+            if (algorithm == null)
+            {
+                throw new ArgumentNullException(nameof(algorithm));
+            }
 
             algorithm.Mode = CipherMode.ECB;
             algorithm.Padding = PaddingMode.None;

@@ -1,14 +1,11 @@
-﻿using FxSsh.Messages;
-using FxSsh.Messages.Connection;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
+﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
-namespace FxSsh.Services
+using Bytewizer.TinyCLR.SecureShell.Messages;
+using Bytewizer.TinyCLR.SecureShell.Messages.Connection;
+
+namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class ConnectionService : SshService, IDynamicInvoker
     {
@@ -24,7 +21,10 @@ namespace FxSsh.Services
         public ConnectionService(Session session, UserauthArgs auth)
             : base(session)
         {
-            Contract.Requires(auth != null);
+            //if (auth == null)
+            //{
+            //    throw new ArgumentNullException(nameof(auth));
+            //}
 
             _auth = auth;
 
@@ -52,7 +52,10 @@ namespace FxSsh.Services
 
         internal void HandleMessageCore(ConnectionServiceMessage message)
         {
-            Contract.Requires(message != null);
+            //if (message == null)
+            //{
+            //    throw new ArgumentNullException(nameof(message));
+            //}
 
             if (message is ChannelWindowAdjustMessage)
                 this.InvokeHandleMessage(message);

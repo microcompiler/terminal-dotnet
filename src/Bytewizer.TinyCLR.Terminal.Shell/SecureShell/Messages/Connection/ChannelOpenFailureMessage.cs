@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace FxSsh.Messages.Connection
+namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class ChannelOpenFailureMessage : ConnectionServiceMessage
     {

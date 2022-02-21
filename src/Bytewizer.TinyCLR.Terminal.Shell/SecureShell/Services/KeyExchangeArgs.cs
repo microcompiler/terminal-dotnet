@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Text;
 
-namespace FxSsh.Services
+namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class KeyExchangeArgs
     {

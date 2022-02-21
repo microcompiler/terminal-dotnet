@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-namespace FxSsh.Messages.Connection
+namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class ForwardedTcpIpMessage : ChannelOpenMessage
     {
@@ -16,7 +16,9 @@ namespace FxSsh.Messages.Connection
             base.OnLoad(reader);
 
             if (ChannelType != "forwarded-tcpip")
-                throw new ArgumentException(string.Format("Channel type {0} is not valid.", ChannelType));
+            { 
+                throw new ArgumentException(string.Format("Channel type {0} is not valid.", ChannelType)); 
+            }
 
             Address = reader.ReadString(Encoding.ASCII);
             Port = reader.ReadUInt32();

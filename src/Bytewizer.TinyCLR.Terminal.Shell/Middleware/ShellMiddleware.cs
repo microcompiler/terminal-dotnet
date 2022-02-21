@@ -1,10 +1,11 @@
 ﻿using System.Collections;
-using System.Text.RegularExpressions;
+
 using Bytewizer.TinyCLR.Logging;
 using Bytewizer.TinyCLR.Pipeline;
 using Bytewizer.TinyCLR.Terminal.Features;
-using FxSsh;
-using FxSsh.Services;
+
+using Bytewizer.TinyCLR.SecureShell;
+using Bytewizer.TinyCLR.SecureShell.Services;
 
 using MiniTerm;
 

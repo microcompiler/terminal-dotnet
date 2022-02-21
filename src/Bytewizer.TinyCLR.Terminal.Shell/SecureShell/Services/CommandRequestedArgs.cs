@@ -1,14 +1,23 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 
-namespace FxSsh.Services
+namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class CommandRequestedArgs
     {
         public CommandRequestedArgs(SessionChannel channel, string type, string command, UserauthArgs userauthArgs)
         {
-            Contract.Requires(channel != null);
-            Contract.Requires(command != null);
-            Contract.Requires(userauthArgs != null);
+            //if (channel == null)
+            //{
+            //    throw new ArgumentNullException(nameof(channel));
+            //}
+            //if (command == null)
+            //{
+            //    throw new ArgumentNullException(nameof(command));
+            //}
+            //if (userauthArgs == null)
+            //{
+            //    throw new ArgumentNullException(nameof(userauthArgs));
+            //};
 
             Channel = channel;
             ShellType = type;

@@ -1,9 +1,9 @@
-﻿using FxSsh.Messages.Connection;
-using System;
-using System.Diagnostics.Contracts;
+﻿using System;
 using System.Threading;
 
-namespace FxSsh.Services
+using Bytewizer.TinyCLR.SecureShell.Messages.Connection;
+
+namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public abstract class Channel
     {
@@ -14,7 +14,11 @@ namespace FxSsh.Services
             uint clientChannelId, uint clientInitialWindowSize, uint clientMaxPacketSize,
             uint serverChannelId)
         {
-            Contract.Requires(connectionService != null);
+
+            if (connectionService == null)
+            {
+                throw new ArgumentNullException(nameof(connectionService));
+            }
 
             _connectionService = connectionService;
 
@@ -50,7 +54,10 @@ namespace FxSsh.Services
 
         public void SendData(byte[] data)
         {
-            Contract.Requires(data != null);
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
 
             if (data.Length == 0)
             {
@@ -73,7 +80,9 @@ namespace FxSsh.Services
                 }
 
                 if (buf == null || packetSize != buf.Length)
+                {
                     buf = new byte[packetSize];
+                }
                 Array.Copy(data, offset, buf, 0, packetSize);
 
                 msg.Data = buf;
@@ -110,7 +119,10 @@ namespace FxSsh.Services
 
         internal void OnData(byte[] data)
         {
-            Contract.Requires(data != null);
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
 
             ServerAttemptAdjustWindow((uint)data.Length);
 

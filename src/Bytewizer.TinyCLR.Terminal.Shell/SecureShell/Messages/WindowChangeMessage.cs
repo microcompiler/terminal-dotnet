@@ -1,6 +1,6 @@
-﻿using FxSsh.Messages.Connection;
+﻿using Bytewizer.TinyCLR.SecureShell.Messages.Connection;
 
-namespace FxSsh.Messages
+namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class WindowChangeMessage : ChannelRequestMessage
     {

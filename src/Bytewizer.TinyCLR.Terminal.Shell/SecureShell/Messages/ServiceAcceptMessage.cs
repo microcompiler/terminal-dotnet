@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace FxSsh.Messages
+namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class ServiceAcceptMessage : Message
     {

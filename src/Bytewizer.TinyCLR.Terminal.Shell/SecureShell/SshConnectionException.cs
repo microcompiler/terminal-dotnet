@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FxSsh
+namespace Bytewizer.TinyCLR.SecureShell
 {
     public class SshConnectionException : Exception
     {

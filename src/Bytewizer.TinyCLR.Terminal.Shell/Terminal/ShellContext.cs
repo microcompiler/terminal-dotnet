@@ -1,6 +1,7 @@
 ﻿using Bytewizer.TinyCLR.Features;
 using Bytewizer.TinyCLR.Sockets.Channel;
-using FxSsh;
+
+using Bytewizer.TinyCLR.SecureShell;
 
 namespace Bytewizer.TinyCLR.Terminal
 {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Net;
-using System.Text;
+﻿using System.Text;
 
-namespace FxSsh.Messages.Connection
+namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class DirectTcpIpMessage : ChannelOpenMessage
     {
@@ -16,7 +14,9 @@ namespace FxSsh.Messages.Connection
             base.OnLoad(reader);
 
             if (ChannelType != "direct-tcpip")
+            {
                 throw new ArgumentException(string.Format("Channel type {0} is not valid.", ChannelType));
+            }
 
             Host = reader.ReadString(Encoding.ASCII);
             Port = reader.ReadUInt32();

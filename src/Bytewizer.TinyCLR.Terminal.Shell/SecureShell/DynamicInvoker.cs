@@ -1,10 +1,10 @@
-﻿using FxSsh.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System;
 using System.Reflection;
+using System.Linq.Expressions;
 
-namespace FxSsh
+using Bytewizer.TinyCLR.SecureShell.Messages;
+
+namespace Bytewizer.TinyCLR.SecureShell
 {
     public static class DynamicInvoker
     {
@@ -12,7 +12,7 @@ namespace FxSsh
             new Dictionary<string, Action<IDynamicInvoker, Message>>();
 
         public static void InvokeHandleMessage(this IDynamicInvoker instance, Message message)
-        {
+        {            
             var instype = instance.GetType();
             var msgtype = message.GetType();
 

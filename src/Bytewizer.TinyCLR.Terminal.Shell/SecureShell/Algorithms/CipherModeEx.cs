@@ -1,5 +1,5 @@
 ﻿
-namespace FxSsh.Algorithms
+namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
     public enum CipherModeEx
     {

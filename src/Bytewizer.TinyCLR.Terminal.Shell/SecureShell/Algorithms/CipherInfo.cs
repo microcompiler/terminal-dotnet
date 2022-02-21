@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
-using System.Linq;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
-namespace FxSsh.Algorithms
+namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
     public class CipherInfo
     {

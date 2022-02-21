@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace FxSsh.Messages.Userauth
+namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
     public class PublicKeyOkMessage : UserauthServiceMessage
     {

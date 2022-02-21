@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 
-namespace FxSsh.Messages.Userauth
+namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
     public class PublicKeyRequestMessage : RequestMessage
     {
@@ -18,7 +17,9 @@ namespace FxSsh.Messages.Userauth
             base.OnLoad(reader);
 
             if (MethodName != "publickey")
+            {
                 throw new ArgumentException(string.Format("Method name {0} is not valid.", MethodName));
+            }
 
             HasSignature = reader.ReadBoolean();
             KeyAlgorithmName = reader.ReadString(Encoding.ASCII);

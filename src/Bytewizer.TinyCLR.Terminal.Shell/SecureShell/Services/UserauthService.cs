@@ -1,12 +1,12 @@
-﻿using FxSsh.Messages;
-using FxSsh.Messages.Userauth;
-using System;
+﻿using System;
 using System.Diagnostics.Contracts;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
+using Bytewizer.TinyCLR.SecureShell.Messages;
+using Bytewizer.TinyCLR.SecureShell.Messages.Userauth;
 
-namespace FxSsh.Services
+namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class UserauthService : SshService, IDynamicInvoker
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace FxSsh.Messages
+namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class UnknownMessage : Message
     {

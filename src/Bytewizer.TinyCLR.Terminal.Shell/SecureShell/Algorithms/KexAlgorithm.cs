@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
-namespace FxSsh.Algorithms
+namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
     public abstract class KexAlgorithm
     {

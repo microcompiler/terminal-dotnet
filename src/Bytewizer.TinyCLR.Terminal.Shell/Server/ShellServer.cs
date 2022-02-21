@@ -6,9 +6,9 @@ using Bytewizer.TinyCLR.Hosting;
 using Bytewizer.TinyCLR.Pipeline;
 using Bytewizer.TinyCLR.Sockets.Channel;
 using Bytewizer.TinyCLR.Sockets.Listener;
-using System.Text.RegularExpressions;
-using FxSsh.Services;
-using FxSsh;
+
+using Bytewizer.TinyCLR.SecureShell;
+using Bytewizer.TinyCLR.SecureShell.Services;
 
 namespace Bytewizer.TinyCLR.Terminal
 {

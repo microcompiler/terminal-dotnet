@@ -1,24 +1,20 @@
-﻿using Bytewizer.TinyCLR.Logging;
+﻿using System;
+using System.Text;
+using System.Collections;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
 
+using Bytewizer.TinyCLR.Logging;
+using Bytewizer.TinyCLR.Terminal;
 using Bytewizer.TinyCLR.Security.Cryptography;
 
-using FxSsh.Algorithms;
-using System.Collections.Concurrent;
-using FxSsh.Messages;
-using FxSsh.Services;
-using System.Diagnostics.Contracts;
-using FxSsh;
-using System.Text;
-using System.Net.Sockets;
-using Bytewizer.TinyCLR.Terminal;
-using System.Text.RegularExpressions;
-using System.Collections;
-using System;
-using System.Diagnostics;
-using FxSsh.Messages.Userauth;
-using FxSsh.Messages.Connection;
+using Bytewizer.TinyCLR.SecureShell.Messages;
+using Bytewizer.TinyCLR.SecureShell.Services;
+using Bytewizer.TinyCLR.SecureShell.Algorithms;
+using Bytewizer.TinyCLR.SecureShell.Messages.Userauth;
+using Bytewizer.TinyCLR.SecureShell.Messages.Connection;
 
-namespace FxSsh
+namespace Bytewizer.TinyCLR.SecureShell
 {
     public class Session : IDynamicInvoker
     {
@@ -49,7 +45,7 @@ namespace FxSsh
             new Dictionary<string, Func<CompressionAlgorithm>>();
 
         private readonly object _locker = new object();
-        
+
 #if DEBUG
         private readonly TimeSpan _timeout = TimeSpan.FromDays(1);
 #else
@@ -60,7 +56,7 @@ namespace FxSsh
         private uint _inboundPacketSequence;
         private uint _outboundFlow;
         private uint _inboundFlow;
-        
+
         private Algorithms _algorithms = null;
         private ExchangeContext _exchangeContext = null;
         private List<SshService> _services = new List<SshService>();
@@ -71,7 +67,7 @@ namespace FxSsh
         public string ServerVersion { get; private set; }
         public string ClientVersion { get; private set; }
         public byte[] SessionId { get; private set; }
-        
+
         public T GetService<T>() where T : SshService
         {
             return (T)_services.FirstOrDefault(x => x is T);
@@ -96,8 +92,8 @@ namespace FxSsh
 
             _compressionAlgorithms.Add("none", () => new NoCompression());
 
-            _messagesMetadata = new Hashtable() 
-            { 
+            _messagesMetadata = new Hashtable(23)
+            {
                 { (byte)1, typeof(DisconnectMessage) },
                 { (byte)30, typeof(KeyExchangeDhInitMessage) },
                 { (byte)31, typeof(KeyExchangeDhReplyMessage) },
@@ -122,46 +118,6 @@ namespace FxSsh
                 { (byte)93, typeof(ChannelWindowAdjustMessage) },
                 { (byte)2, typeof(ShouldIgnoreMessage) },
             };
-
-
-            //_messagesMetadata = (from t in typeof(Message).Assembly.GetTypes()
-            //                     let attrib = (MessageAttribute)t.GetCustomAttributes(typeof(MessageAttribute), false).FirstOrDefault()
-            //                     where attrib != null
-            //                     select new { attrib.Number, Type = t })
-            //                     .ToDictionary(x => x.Number, x => x.Type);
-
-            //foreach (var message in _messagesMetadata)
-            //{
-            //    Debug.WriteLine($"{{ (byte){message.Key}, typeof({message.Value.Name}) }},");
-            //}
-
-            //var tom = new Hashtable()
-            //{
-            //    { 1, "FxSsh.Messages.DisconnectMessage" },
-            //    { 30, "FxSsh.Messages.KeyExchangeDhInitMessage" },
-            //    { 31, "FxSsh.Messages.KeyExchangeDhReplyMessage" },
-            //    { 20, "FxSsh.Messages.KeyExchangeInitMessage" },
-            //    { 21, "FxSsh.Messages.NewKeysMessage" },
-            //    { 6, "FxSsh.Messages.ServiceAcceptMessage" },
-            //    { 5, "FxSsh.Messages.ServiceRequestMessage" },
-            //    { 3, "FxSsh.Messages.UnimplementedMessage" },
-            //    { 51, "FxSsh.Messages.Userauth.FailureMessage" },
-            //    { 60, "FxSsh.Messages.Userauth.PublicKeyOkMessage" },
-            //    { 50, "FxSsh.Messages.Userauth.RequestMessage" },
-            //    { 52, "FxSsh.Messages.Userauth.SuccessMessage" },
-            //    { 97, "FxSsh.Messages.Connection.ChannelCloseMessage" },
-            //    { 94, "FxSsh.Messages.Connection.ChannelDataMessage" },
-            //    { 96, "FxSsh.Messages.Connection.ChannelEofMessage" },
-            //    { 100, "FxSsh.Messages.Connection.ChannelFailureMessage" },
-            //    { 91, "FxSsh.Messages.Connection.ChannelOpenConfirmationMessage" },
-            //    { 92, "FxSsh.Messages.Connection.ChannelOpenFailureMessage" },
-            //    { 90, "FxSsh.Messages.Connection.ChannelOpenMessage" },
-            //    { 98, "FxSsh.Messages.Connection.ChannelRequestMessage" },
-            //    { 99, "FxSsh.Messages.Connection.ChannelSuccessMessage" },
-            //    { 93, "FxSsh.Messages.Connection.ChannelWindowAdjustMessage" },
-            //    { 2, "FxSsh.Messages.Connection.ShouldIgnoreMessage" },
-            //};
-            ////tom.Add()
         }
 
         public Session(
@@ -442,7 +398,7 @@ namespace FxSsh
             var blockSize = (byte)(useAlg ? Math.Max(8, _algorithms.ClientEncryption.BlockBytesSize) : 8);
 
             var firstBlock = new byte[blockSize];
-            _context.Channel.Read(firstBlock);    
+            _context.Channel.Read(firstBlock);
             //var firstBlock = SocketRead(blockSize);
 
             if (useAlg)
@@ -467,7 +423,7 @@ namespace FxSsh
             if (useAlg)
             {
                 var clientMac = new byte[_algorithms.ClientHmac.DigestLength];
-                _context.Channel.Read(clientMac);   
+                _context.Channel.Read(clientMac);
                 //var clientMac = SocketRead(_algorithms.ClientHmac.DigestLength);
                 var mac = ComputeHmac(_algorithms.ClientHmac, fullPacket, _inboundPacketSequence);
                 if (!clientMac.SequenceEqual(mac))

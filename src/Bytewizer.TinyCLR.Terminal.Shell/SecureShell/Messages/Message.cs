@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
-namespace FxSsh.Messages
+namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public abstract class Message
     {
@@ -11,14 +10,19 @@ namespace FxSsh.Messages
 
         public void Load(byte[] bytes)
         {
-            Contract.Requires(bytes != null);
+            if (bytes == null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
 
             RawBytes = bytes;
             using (var worker = new SshDataWorker(bytes))
             {
                 var number = worker.ReadByte();
                 if (number != MessageType)
+                {
                     throw new ArgumentException(string.Format("Message type {0} is not valid.", number));
+                }
 
                 OnLoad(worker);
             }
@@ -38,7 +42,10 @@ namespace FxSsh.Messages
 
         public static T LoadFrom<T>(Message message) where T : Message, new()
         {
-            Contract.Requires(message != null);
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
             var msg = new T();
             msg.Load(message.RawBytes);
@@ -47,15 +54,11 @@ namespace FxSsh.Messages
 
         protected virtual void OnLoad(SshDataWorker reader)
         {
-            Contract.Requires(reader != null);
-
             throw new NotSupportedException();
         }
 
         protected virtual void OnGetPacket(SshDataWorker writer)
         {
-            Contract.Requires(writer != null);
-
             throw new NotSupportedException();
         }
     }

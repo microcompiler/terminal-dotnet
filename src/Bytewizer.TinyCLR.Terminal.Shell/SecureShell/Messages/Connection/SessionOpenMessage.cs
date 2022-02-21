@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FxSsh.Messages.Connection
+namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class SessionOpenMessage : ChannelOpenMessage
     {

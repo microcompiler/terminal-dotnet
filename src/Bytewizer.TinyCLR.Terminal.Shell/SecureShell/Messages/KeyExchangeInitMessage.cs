@@ -3,7 +3,7 @@ using System.Text;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
-namespace FxSsh.Messages
+namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class KeyExchangeInitMessage : Message
     {

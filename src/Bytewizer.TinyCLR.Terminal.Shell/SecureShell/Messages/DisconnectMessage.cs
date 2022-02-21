@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Text;
 
-namespace FxSsh.Messages
+namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class DisconnectMessage : Message
     {
@@ -14,8 +13,15 @@ namespace FxSsh.Messages
 
         public DisconnectMessage(DisconnectReason reasonCode, string description = "", string language = "en")
         {
-            Contract.Requires(description != null);
-            Contract.Requires(language != null);
+            if (description == null)
+            {
+                throw new ArgumentNullException(nameof(description));
+            }
+
+            if (language == null)
+            {
+                throw new ArgumentNullException(nameof(language));
+            }
 
             ReasonCode = reasonCode;
             Description = description;

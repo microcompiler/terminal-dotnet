@@ -1,6 +1,6 @@
 ﻿using Bytewizer.TinyCLR.Security.Cryptography;
 
-namespace FxSsh.Algorithms
+namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
     public class EncryptionAlgorithm
     {

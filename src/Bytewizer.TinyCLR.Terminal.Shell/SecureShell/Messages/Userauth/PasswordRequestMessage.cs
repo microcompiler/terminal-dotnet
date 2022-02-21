@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 
-namespace FxSsh.Messages.Userauth
+namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
     public class PasswordRequestMessage : RequestMessage
     {
@@ -13,7 +12,9 @@ namespace FxSsh.Messages.Userauth
             base.OnLoad(reader);
 
             if (MethodName != "password")
+            {
                 throw new ArgumentException(string.Format("Method name {0} is not valid.", MethodName));
+            }
 
             var isFalse = reader.ReadBoolean();
             Password = reader.ReadString(Encoding.ASCII);

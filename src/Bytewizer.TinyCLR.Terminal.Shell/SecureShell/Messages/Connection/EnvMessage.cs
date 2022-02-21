@@ -1,7 +1,8 @@
-﻿using FxSsh.Messages.Connection;
-using System.Text;
+﻿using System.Text;
 
-namespace FxSsh.Messages
+using Bytewizer.TinyCLR.SecureShell.Messages.Connection;
+
+namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class EnvMessage : ChannelRequestMessage
     {
