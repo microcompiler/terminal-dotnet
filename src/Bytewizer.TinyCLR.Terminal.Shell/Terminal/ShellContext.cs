@@ -38,7 +38,7 @@ namespace Bytewizer.TinyCLR.Terminal
         /// <summary>
         /// Gets or sets the <see cref="Terminal.Session"/> used to manage user session data for this request.
         /// </summary>
-        public SshSession Session { get; set; }
+        public ShellSession Session { get; set; }
 
         /// <summary>
         /// Gets information about the underlying connection for this request.

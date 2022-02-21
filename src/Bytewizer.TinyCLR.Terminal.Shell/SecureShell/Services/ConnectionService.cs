@@ -18,7 +18,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 
         private int _serverChannelCounter = -1;
 
-        public ConnectionService(SshSession session, UserauthArgs auth)
+        public ConnectionService(ShellSession session, UserauthArgs auth)
             : base(session)
         {
             //if (auth == null)

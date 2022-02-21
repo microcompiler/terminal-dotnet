@@ -4,7 +4,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class UserauthArgs
     {
-        public UserauthArgs(SshSession session, string username, string keyAlgorithm, string fingerprint, byte[] key)
+        public UserauthArgs(ShellSession session, string username, string keyAlgorithm, string fingerprint, byte[] key)
         {
             Contract.Requires(keyAlgorithm != null);
             Contract.Requires(fingerprint != null);
@@ -18,7 +18,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
             Username = username;
         }
 
-        public UserauthArgs(SshSession session, string username, string password)
+        public UserauthArgs(ShellSession session, string username, string password)
         {
             Contract.Requires(username != null);
             Contract.Requires(password != null);
@@ -30,7 +30,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
         }
 
         public string AuthMethod { get; private set; }
-        public SshSession Session { get; private set; }
+        public ShellSession Session { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
         public string KeyAlgorithm { get; private set; }

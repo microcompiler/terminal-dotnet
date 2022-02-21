@@ -68,7 +68,7 @@ namespace Bytewizer.TinyCLR.Terminal
 
             endpointFeature.AvailableCommands = _endpointProvider.GetCommands();
 
-            ctx.Session = new SshSession(_logger, ctx, _shellOptions);
+            ctx.Session = new ShellSession(_logger, ctx, _shellOptions);
             ctx.Session.KeysExchanged += Session_KeysExchanged;
             ctx.Session.ServiceRegistered += Session_ServiceRegistered;
 
@@ -111,7 +111,7 @@ namespace Bytewizer.TinyCLR.Terminal
 
         private void Session_ServiceRegistered(object sender, SshService e)
         {
-            var session = (SshSession)sender;
+            var session = (ShellSession)sender;
             Console.WriteLine("Session {0} requesting {1}.",
                 BitConverter.ToString(session.SessionId).Replace("-", ""), e.GetType().Name);
 

@@ -11,7 +11,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class UserauthService : SshService, IDynamicInvoker
     {
-        public UserauthService(SshSession session)
+        public UserauthService(ShellSession session)
             : base(session)
         {
         }
@@ -101,13 +101,13 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 
         private void HandleMessage(PublicKeyRequestMessage message)
         {
-            if (SshSession._publicKeyAlgorithms.ContainsKey(message.KeyAlgorithmName))
+            if (ShellSession._publicKeyAlgorithms.ContainsKey(message.KeyAlgorithmName))
             {
                 var verifed = false;
 
                 //var keyAlg = (PublicKeyAlgorithm)SshSession._publicKeyAlgorithms[message.KeyAlgorithmName];
 
-                var keyAlg = SshSession._publicKeyAlgorithms[message.KeyAlgorithmName](new RSAParameters());
+                var keyAlg = ShellSession._publicKeyAlgorithms[message.KeyAlgorithmName](new RSAParameters());
                 keyAlg.LoadKeyAndCertificatesData(message.PublicKey);
 
                 var args = new UserauthArgs(base._session, message.Username, message.KeyAlgorithmName, keyAlg.GetFingerprint(), message.PublicKey);

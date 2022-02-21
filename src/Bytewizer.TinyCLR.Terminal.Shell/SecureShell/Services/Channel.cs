@@ -28,9 +28,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
             ClientMaxPacketSize = clientMaxPacketSize;
 
             ServerChannelId = serverChannelId;
-            ServerInitialWindowSize = SshSession.InitialLocalWindowSize;
-            ServerWindowSize = SshSession.InitialLocalWindowSize;
-            ServerMaxPacketSize = SshSession.LocalChannelDataPacketSize;
+            ServerInitialWindowSize = ShellSession.InitialLocalWindowSize;
+            ServerWindowSize = ShellSession.InitialLocalWindowSize;
+            ServerMaxPacketSize = ShellSession.LocalChannelDataPacketSize;
         }
 
         public uint ClientChannelId { get; private set; }

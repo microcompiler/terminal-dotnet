@@ -7,12 +7,12 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class KeyExchangeArgs
     {
-        public KeyExchangeArgs(SshSession s)
+        public KeyExchangeArgs(ShellSession s)
         {
             this.Session = s;
         }
 
-        public SshSession Session { get; private set; }
+        public ShellSession Session { get; private set; }
 
         public byte[] Cookie { get; private set; }
 

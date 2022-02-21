@@ -16,7 +16,7 @@ using Bytewizer.TinyCLR.SecureShell.Messages.Connection;
 
 namespace Bytewizer.TinyCLR.SecureShell
 {
-    public class SshSession : IDynamicInvoker
+    public class ShellSession : IDynamicInvoker
     {
         private readonly ILogger _logger;
         private readonly ShellContext _context;
@@ -73,7 +73,7 @@ namespace Bytewizer.TinyCLR.SecureShell
             return (T)_services.FirstOrDefault(x => x is T);
         }
 
-        static SshSession()
+        static ShellSession()
         {
             _keyExchangeAlgorithms.Add("diffie-hellman-group14-sha1", () => new DiffieHellmanGroupSha1(new DiffieHellman(2048)));
             _keyExchangeAlgorithms.Add("diffie-hellman-group1-sha1", () => new DiffieHellmanGroupSha1(new DiffieHellman(1024)));
@@ -120,7 +120,7 @@ namespace Bytewizer.TinyCLR.SecureShell
             };
         }
 
-        public SshSession(
+        public ShellSession(
                 ILogger logger,
                 ShellContext context,
                 ShellServerOptions terminalOptions)
