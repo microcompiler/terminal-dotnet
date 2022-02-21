@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Services
+﻿namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class KeyExchangeArgs
     {

@@ -1,15 +1,27 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace Bytewizer.TinyCLR.SecureShell.Services
+﻿namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class PtyArgs
     {
         public PtyArgs(SessionChannel channel, string terminal, uint heightPx, uint heightRows, uint widthPx, uint widthChars, string modes, UserauthArgs userauthArgs)
         {
-            Contract.Requires(channel != null);
-            Contract.Requires(terminal != null);
-            Contract.Requires(modes != null);
-            Contract.Requires(userauthArgs != null);
+            if (channel == null)
+            {
+                throw new ArgumentNullException(nameof(channel));
+            }
+
+            if (terminal == null)
+            {
+                throw new ArgumentNullException(nameof(terminal));
+            }
+
+            if (modes == null)
+            {
+                throw new ArgumentNullException(nameof(modes));
+            }
+            if (userauthArgs == null)
+            {
+                throw new ArgumentNullException(nameof(userauthArgs));
+            }
 
             Channel = channel;
             Terminal = terminal;

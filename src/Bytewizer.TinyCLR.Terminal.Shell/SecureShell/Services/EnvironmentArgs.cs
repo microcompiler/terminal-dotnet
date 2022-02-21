@@ -1,15 +1,27 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace Bytewizer.TinyCLR.SecureShell.Services
+﻿namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class EnvironmentArgs
     {
         public EnvironmentArgs(SessionChannel channel, string name, string value, UserauthArgs userauthArgs)
         {
-            Contract.Requires(channel != null);
-            Contract.Requires(name != null);
-            Contract.Requires(value != null);
-            Contract.Requires(userauthArgs != null);
+            if (channel == null)
+            {
+                throw new ArgumentNullException(nameof(channel));
+            }
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (userauthArgs == null)
+            {
+                throw new ArgumentNullException(nameof(userauthArgs));
+            }
 
             Channel = channel;
             Name = name;

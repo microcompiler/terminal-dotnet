@@ -1,14 +1,24 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace Bytewizer.TinyCLR.SecureShell.Services
+﻿namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class UserauthArgs
     {
         public UserauthArgs(ShellSession session, string username, string keyAlgorithm, string fingerprint, byte[] key)
         {
-            Contract.Requires(keyAlgorithm != null);
-            Contract.Requires(fingerprint != null);
-            Contract.Requires(key != null);
+
+            if (keyAlgorithm == null)
+            {
+                throw new ArgumentNullException(nameof(keyAlgorithm));
+            }
+
+            if (fingerprint == null)
+            {
+                throw new ArgumentNullException(nameof(fingerprint));
+            }
+
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
 
             AuthMethod = "publickey";
             KeyAlgorithm = keyAlgorithm;
@@ -20,8 +30,15 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 
         public UserauthArgs(ShellSession session, string username, string password)
         {
-            Contract.Requires(username != null);
-            Contract.Requires(password != null);
+            if (username == null)
+            {
+                throw new ArgumentNullException(nameof(username));
+            }
+
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
 
             AuthMethod = "password";
             Username = username;

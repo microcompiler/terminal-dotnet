@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
 using Bytewizer.TinyCLR.SecureShell.Messages;
 using Bytewizer.TinyCLR.SecureShell.Messages.Userauth;
-using Bytewizer.TinyCLR.SecureShell.Algorithms;
 
 namespace Bytewizer.TinyCLR.SecureShell.Services
 {
@@ -26,7 +24,10 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 
         internal void HandleMessageCore(UserauthServiceMessage message)
         {
-            Contract.Requires(message != null);
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
             this.InvokeHandleMessage(message);
         }
@@ -50,28 +51,6 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
                     break;
             }
         }
-
-
-        //private void HandleMessage(RequestMessage message)
-        //{
-        //    switch (message.MethodName)
-        //    {
-        //        case "publickey":
-        //            var keyMsg = Message.LoadFrom<PublicKeyRequestMessage>(message);
-        //            HandleMessage(keyMsg);
-        //            break;
-        //        case "password":
-        //            var pswdMsg = Message.LoadFrom<PasswordRequestMessage>(message);
-        //            HandleMessage(pswdMsg);
-        //            break;
-        //        case "hostbased":
-        //        case "none":
-        //        default:
-        //            _session.SendMessage(new FailureMessage());
-        //            break;
-        //    }
-        //}
-
 
         private void HandleMessage(PasswordRequestMessage message)
         {

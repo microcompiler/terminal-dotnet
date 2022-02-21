@@ -1,14 +1,23 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace Bytewizer.TinyCLR.SecureShell.Services
+﻿namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class TcpRequestArgs
     {
         public TcpRequestArgs(SessionChannel channel, string host, int port, string originatorIP, int originatorPort, UserauthArgs userauthArgs)
         {
-            Contract.Requires(channel != null);
-            Contract.Requires(host != null);
-            Contract.Requires(originatorIP != null);
+            if (channel == null)
+            {
+                throw new ArgumentNullException(nameof(channel));
+            }
+
+            if (host == null)
+            {
+                throw new ArgumentNullException(nameof(host));
+            }
+
+            if (originatorIP == null)
+            {
+                throw new ArgumentNullException(nameof(originatorIP));
+            }
 
             Channel = channel;
             Host = host;

@@ -6,7 +6,10 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
     {
         public WindowChangeArgs(SessionChannel channel, uint widthColumns, uint heightRows, uint widthPixels, uint heightPixels)
         {
-            Contract.Requires(channel != null);
+            if (channel == null)
+            {
+                throw new ArgumentNullException(nameof(channel));
+            }
 
             Channel = channel;
             WidthColumns = widthColumns;
