@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class ServiceRequestMessage : Message
     {
@@ -11,9 +8,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
-            ServiceName = reader.ReadString(Encoding.ASCII);
+            ServiceName = reader.ReadString();
         }
     }
 }

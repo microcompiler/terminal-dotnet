@@ -1,4 +1,5 @@
-﻿using Bytewizer.TinyCLR.Security.Cryptography;
+﻿using System;
+using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
@@ -10,10 +11,26 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 
         public EncryptionAlgorithm(SymmetricAlgorithm algorithm, int keySize, CipherModeEx mode, byte[] key, byte[] iv, bool isEncryption)
         {
-            //Contract.Requires(algorithm != null);
-            //Contract.Requires(key != null);
-            //Contract.Requires(iv != null);
-            //Contract.Requires(keySize == key.Length << 3);
+
+            if (algorithm == null)
+            {
+                throw new ArgumentNullException(nameof(algorithm));
+            }
+
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (iv == null)
+            {
+                throw new ArgumentNullException(nameof(iv));
+            }
+
+            if (keySize != key.Length << 3)
+            {
+                throw new ArgumentNullException(nameof(keySize));
+            }
 
             algorithm.KeySize = keySize;
             algorithm.Key = key;

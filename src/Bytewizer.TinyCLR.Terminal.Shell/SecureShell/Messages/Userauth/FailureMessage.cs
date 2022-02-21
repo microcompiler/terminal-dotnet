@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
     public class FailureMessage : UserauthServiceMessage
     {
@@ -9,9 +6,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
-            writer.Write("password,publickey", Encoding.ASCII);
+            writer.Write("password,publickey");
             writer.Write(false);
         }
     }

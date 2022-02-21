@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
     public class PublicKeyOkMessage : UserauthServiceMessage
     {
@@ -12,9 +9,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
-            writer.Write(KeyAlgorithmName, Encoding.ASCII);
+            writer.Write(KeyAlgorithmName);
             writer.WriteBinary(PublicKey);
         }
     }

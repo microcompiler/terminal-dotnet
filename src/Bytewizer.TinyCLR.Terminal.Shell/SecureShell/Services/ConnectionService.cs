@@ -18,7 +18,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 
         private int _serverChannelCounter = -1;
 
-        public ConnectionService(Session session, UserauthArgs auth)
+        public ConnectionService(SshSession session, UserauthArgs auth)
             : base(session)
         {
             //if (auth == null)
@@ -83,15 +83,15 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
             switch (message.ChannelType)
             {
                 case "session":
-                    var msg = Message.LoadFrom<SessionOpenMessage>(message);
+                    var msg = (SessionOpenMessage)Message.LoadFrom(message, typeof(SessionOpenMessage));
                     HandleMessage(msg);
                     break;
                 case "direct-tcpip":
-                    var tcpMsg = Message.LoadFrom<DirectTcpIpMessage>(message);
+                    var tcpMsg = (DirectTcpIpMessage)Message.LoadFrom(message, typeof(DirectTcpIpMessage));
                     HandleMessage(tcpMsg);
                     break;
                 case "forwarded-tcpip":
-                    var forwardMsg = Message.LoadFrom<ForwardedTcpIpMessage>(message);
+                    var forwardMsg = (ForwardedTcpIpMessage)Message.LoadFrom(message, typeof(ForwardedTcpIpMessage));
                     HandleMessage(forwardMsg);
                     break;
                 default:
@@ -138,27 +138,27 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
             switch (message.RequestType)
             {
                 case "exec":
-                    var msg = Message.LoadFrom<CommandRequestMessage>(message);
+                    var msg = (CommandRequestMessage)Message.LoadFrom(message, typeof(CommandRequestMessage));
                     HandleMessage(msg);
                     break;
                 case "shell":
-                    var shell_msg = Message.LoadFrom<ShellRequestMessage>(message);
+                    var shell_msg = (ShellRequestMessage)Message.LoadFrom(message, typeof(ShellRequestMessage));
                     HandleMessage(shell_msg);
                     break;
                 case "pty-req":
-                    var pty_msg = Message.LoadFrom<PtyRequestMessage>(message);
+                    var pty_msg = (PtyRequestMessage)Message.LoadFrom(message, typeof(PtyRequestMessage));
                     HandleMessage(pty_msg);
                     break;
                 case "env":
-                    var env_msg = Message.LoadFrom<EnvMessage>(message);
+                    var env_msg = (EnvMessage)Message.LoadFrom(message, typeof(EnvMessage));
                     HandleMessage(env_msg);
                     break;
                 case "subsystem":
-                    var sub_msg = Message.LoadFrom<SubsystemRequestMessage>(message);
+                    var sub_msg = (SubsystemRequestMessage)Message.LoadFrom(message, typeof(SubsystemRequestMessage));
                     HandleMessage(sub_msg);
                     break;
                 case "window-change":
-                    var window_change_msg = Message.LoadFrom<WindowChangeMessage>(message);
+                    var window_change_msg = (WindowChangeMessage)Message.LoadFrom(message, typeof(WindowChangeMessage));
                     HandleMessage(window_change_msg);
                     break;
                 case "simple@putty.projects.tartarus.org":

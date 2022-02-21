@@ -9,7 +9,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
         public uint WidthPixels { get; private set; }
         public uint HeightPixels { get; private set; }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             base.OnLoad(reader);
 

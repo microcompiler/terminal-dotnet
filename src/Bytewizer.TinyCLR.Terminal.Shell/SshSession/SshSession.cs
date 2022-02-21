@@ -16,7 +16,7 @@ using Bytewizer.TinyCLR.SecureShell.Messages.Connection;
 
 namespace Bytewizer.TinyCLR.SecureShell
 {
-    public class Session : IDynamicInvoker
+    public class SshSession : IDynamicInvoker
     {
         private readonly ILogger _logger;
         private readonly ShellContext _context;
@@ -73,7 +73,7 @@ namespace Bytewizer.TinyCLR.SecureShell
             return (T)_services.FirstOrDefault(x => x is T);
         }
 
-        static Session()
+        static SshSession()
         {
             _keyExchangeAlgorithms.Add("diffie-hellman-group14-sha1", () => new DiffieHellmanGroupSha1(new DiffieHellman(2048)));
             _keyExchangeAlgorithms.Add("diffie-hellman-group1-sha1", () => new DiffieHellmanGroupSha1(new DiffieHellman(1024)));
@@ -120,7 +120,7 @@ namespace Bytewizer.TinyCLR.SecureShell
             };
         }
 
-        public Session(
+        public SshSession(
                 ILogger logger,
                 ShellContext context,
                 ShellServerOptions terminalOptions)
@@ -495,7 +495,7 @@ namespace Bytewizer.TinyCLR.SecureShell
             var padding = new byte[paddingLength];
             _rng.GetBytes(padding);
 
-            using (var worker = new SshDataWorker())
+            using (var worker = new SshDataStream())
             {
                 worker.Write(packetLength);
                 worker.Write(paddingLength);
@@ -747,10 +747,10 @@ namespace Bytewizer.TinyCLR.SecureShell
 
         private byte[] ComputeExchangeHash(KexAlgorithm kexAlg, byte[] hostKeyAndCerts, byte[] clientExchangeValue, byte[] serverExchangeValue, byte[] sharedSecret)
         {
-            using (var worker = new SshDataWorker())
+            using (var worker = new SshDataStream())
             {
-                worker.Write(ClientVersion, Encoding.ASCII);
-                worker.Write(ServerVersion, Encoding.ASCII);
+                worker.Write(ClientVersion);
+                worker.Write(ServerVersion);
                 worker.WriteBinary(_exchangeContext.ClientKexInitPayload);
                 worker.WriteBinary(_exchangeContext.ServerKexInitPayload);
                 worker.WriteBinary(hostKeyAndCerts);
@@ -771,7 +771,7 @@ namespace Bytewizer.TinyCLR.SecureShell
 
             while (keyBufferIndex < blockSize)
             {
-                using (var worker = new SshDataWorker())
+                using (var worker = new SshDataStream())
                 {
                     worker.WriteMpint(sharedSecret);
                     worker.Write(exchangeHash);
@@ -800,7 +800,7 @@ namespace Bytewizer.TinyCLR.SecureShell
 
         private byte[] ComputeHmac(HmacAlgorithm alg, byte[] payload, uint seq)
         {
-            using (var worker = new SshDataWorker())
+            using (var worker = new SshDataStream())
             {
                 worker.Write(seq);
                 worker.Write(payload);

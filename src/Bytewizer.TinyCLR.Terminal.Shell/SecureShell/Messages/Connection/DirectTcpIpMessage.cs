@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System;
 
 namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
@@ -9,7 +9,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
         public string OriginatorIPAddress { get; private set; }
         public uint OriginatorPort { get; private set; }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             base.OnLoad(reader);
 
@@ -18,9 +18,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
                 throw new ArgumentException(string.Format("Channel type {0} is not valid.", ChannelType));
             }
 
-            Host = reader.ReadString(Encoding.ASCII);
+            Host = reader.ReadString();
             Port = reader.ReadUInt32();
-            OriginatorIPAddress = reader.ReadString(Encoding.ASCII);
+            OriginatorIPAddress = reader.ReadString();
             OriginatorPort = reader.ReadUInt32();
         }
     }

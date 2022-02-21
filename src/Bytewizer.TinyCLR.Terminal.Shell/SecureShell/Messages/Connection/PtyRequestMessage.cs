@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class PtyRequestMessage : ChannelRequestMessage
     {
@@ -11,16 +9,16 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
         public uint heightPx = 0;
         public string modes = "";
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             base.OnLoad(reader);
 
-            Terminal = reader.ReadString(Encoding.ASCII);
+            Terminal = reader.ReadString();
             widthChars = reader.ReadUInt32();
             heightRows = reader.ReadUInt32();
             widthPx = reader.ReadUInt32();
             heightPx = reader.ReadUInt32();
-            modes = reader.ReadString(Encoding.ASCII);
+            modes = reader.ReadString();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class UnimplementedMessage : Message
     {
@@ -10,12 +8,12 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             SequenceNumber = reader.ReadUInt32();
         }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
             writer.Write(SequenceNumber);
         }

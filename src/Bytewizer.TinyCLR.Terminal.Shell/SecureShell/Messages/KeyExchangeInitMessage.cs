@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-using Bytewizer.TinyCLR.Security.Cryptography;
+﻿using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
@@ -45,36 +42,36 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             Cookie = reader.ReadBinary(16);
-            KeyExchangeAlgorithms = reader.ReadString(Encoding.ASCII).Split(',');
-            ServerHostKeyAlgorithms = reader.ReadString(Encoding.ASCII).Split(',');
-            EncryptionAlgorithmsClientToServer = reader.ReadString(Encoding.ASCII).Split(',');
-            EncryptionAlgorithmsServerToClient = reader.ReadString(Encoding.ASCII).Split(',');
-            MacAlgorithmsClientToServer = reader.ReadString(Encoding.ASCII).Split(',');
-            MacAlgorithmsServerToClient = reader.ReadString(Encoding.ASCII).Split(',');
-            CompressionAlgorithmsClientToServer = reader.ReadString(Encoding.ASCII).Split(',');
-            CompressionAlgorithmsServerToClient = reader.ReadString(Encoding.ASCII).Split(',');
-            LanguagesClientToServer = reader.ReadString(Encoding.ASCII).Split(',');
-            LanguagesServerToClient = reader.ReadString(Encoding.ASCII).Split(',');
+            KeyExchangeAlgorithms = reader.ReadString().Split(',');
+            ServerHostKeyAlgorithms = reader.ReadString().Split(',');
+            EncryptionAlgorithmsClientToServer = reader.ReadString().Split(',');
+            EncryptionAlgorithmsServerToClient = reader.ReadString().Split(',');
+            MacAlgorithmsClientToServer = reader.ReadString().Split(',');
+            MacAlgorithmsServerToClient = reader.ReadString().Split(',');
+            CompressionAlgorithmsClientToServer = reader.ReadString().Split(',');
+            CompressionAlgorithmsServerToClient = reader.ReadString().Split(',');
+            LanguagesClientToServer = reader.ReadString().Split(',');
+            LanguagesServerToClient = reader.ReadString().Split(',');
             FirstKexPacketFollows = reader.ReadBoolean();
             Reserved = reader.ReadUInt32();
         }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
             writer.Write(Cookie);
-            writer.Write(string.Join(",", KeyExchangeAlgorithms), Encoding.ASCII);
-            writer.Write(string.Join(",", ServerHostKeyAlgorithms), Encoding.ASCII);
-            writer.Write(string.Join(",", EncryptionAlgorithmsClientToServer), Encoding.ASCII);
-            writer.Write(string.Join(",", EncryptionAlgorithmsServerToClient), Encoding.ASCII);
-            writer.Write(string.Join(",", MacAlgorithmsClientToServer), Encoding.ASCII);
-            writer.Write(string.Join(",", MacAlgorithmsServerToClient), Encoding.ASCII);
-            writer.Write(string.Join(",", CompressionAlgorithmsClientToServer), Encoding.ASCII);
-            writer.Write(string.Join(",", CompressionAlgorithmsServerToClient), Encoding.ASCII);
-            writer.Write(string.Join(",", LanguagesClientToServer), Encoding.ASCII);
-            writer.Write(string.Join(",", LanguagesServerToClient), Encoding.ASCII);
+            writer.Write(KeyExchangeAlgorithms.Join(","));
+            writer.Write(ServerHostKeyAlgorithms.Join(","));
+            writer.Write(EncryptionAlgorithmsClientToServer.Join(","));
+            writer.Write(EncryptionAlgorithmsServerToClient.Join(","));
+            writer.Write(MacAlgorithmsClientToServer.Join(","));
+            writer.Write(MacAlgorithmsServerToClient.Join(","));
+            writer.Write(CompressionAlgorithmsClientToServer.Join(","));
+            writer.Write(CompressionAlgorithmsServerToClient.Join(","));
+            writer.Write(LanguagesClientToServer.Join(","));
+            writer.Write(LanguagesServerToClient.Join(","));
             writer.Write(FirstKexPacketFollows);
             writer.Write(Reserved);
         }

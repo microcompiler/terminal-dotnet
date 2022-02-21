@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class ServiceAcceptMessage : Message
     {
@@ -16,9 +13,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
-            writer.Write(ServiceName, Encoding.ASCII);
+            writer.Write(ServiceName);
         }
     }
 }

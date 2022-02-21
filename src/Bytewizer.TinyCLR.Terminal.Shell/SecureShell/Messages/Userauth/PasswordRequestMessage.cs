@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
@@ -7,7 +6,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
     {
         public string Password { get; private set; }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             base.OnLoad(reader);
 
@@ -17,7 +16,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
             }
 
             var isFalse = reader.ReadBoolean();
-            Password = reader.ReadString(Encoding.ASCII);
+            Password = reader.ReadString();
         }
     }
 }

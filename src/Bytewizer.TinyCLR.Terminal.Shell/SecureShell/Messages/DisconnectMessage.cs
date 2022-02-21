@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
@@ -34,19 +33,19 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             ReasonCode = (DisconnectReason)reader.ReadUInt32();
-            Description = reader.ReadString(Encoding.UTF8);
+            Description = reader.ReadString();
             if (reader.DataAvailable >= 4)
-                Language = reader.ReadString(Encoding.UTF8);
+                Language = reader.ReadString();
         }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
             writer.Write((uint)ReasonCode);
-            writer.Write(Description, Encoding.UTF8);
-            writer.Write(Language ?? "en", Encoding.UTF8);
+            writer.Write(Description);
+            writer.Write(Language ?? "en");
         }
     }
 }

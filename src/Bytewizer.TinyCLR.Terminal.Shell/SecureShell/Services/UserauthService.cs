@@ -5,12 +5,13 @@ using Bytewizer.TinyCLR.Security.Cryptography;
 
 using Bytewizer.TinyCLR.SecureShell.Messages;
 using Bytewizer.TinyCLR.SecureShell.Messages.Userauth;
+using Bytewizer.TinyCLR.SecureShell.Algorithms;
 
 namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public class UserauthService : SshService, IDynamicInvoker
     {
-        public UserauthService(Session session)
+        public UserauthService(SshSession session)
             : base(session)
         {
         }
@@ -35,11 +36,11 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
             switch (message.MethodName)
             {
                 case "publickey":
-                    var keyMsg = Message.LoadFrom<PublicKeyRequestMessage>(message);
+                    var keyMsg = (PublicKeyRequestMessage)Message.LoadFrom(message, typeof(PublicKeyRequestMessage));
                     HandleMessage(keyMsg);
                     break;
                 case "password":
-                    var pswdMsg = Message.LoadFrom<PasswordRequestMessage>(message);
+                    var pswdMsg = (PasswordRequestMessage)Message.LoadFrom(message, typeof(PasswordRequestMessage));
                     HandleMessage(pswdMsg);
                     break;
                 case "hostbased":
@@ -49,6 +50,28 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
                     break;
             }
         }
+
+
+        //private void HandleMessage(RequestMessage message)
+        //{
+        //    switch (message.MethodName)
+        //    {
+        //        case "publickey":
+        //            var keyMsg = Message.LoadFrom<PublicKeyRequestMessage>(message);
+        //            HandleMessage(keyMsg);
+        //            break;
+        //        case "password":
+        //            var pswdMsg = Message.LoadFrom<PasswordRequestMessage>(message);
+        //            HandleMessage(pswdMsg);
+        //            break;
+        //        case "hostbased":
+        //        case "none":
+        //        default:
+        //            _session.SendMessage(new FailureMessage());
+        //            break;
+        //    }
+        //}
+
 
         private void HandleMessage(PasswordRequestMessage message)
         {
@@ -78,11 +101,13 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 
         private void HandleMessage(PublicKeyRequestMessage message)
         {
-            if (Session._publicKeyAlgorithms.ContainsKey(message.KeyAlgorithmName))
+            if (SshSession._publicKeyAlgorithms.ContainsKey(message.KeyAlgorithmName))
             {
                 var verifed = false;
 
-                var keyAlg = Session._publicKeyAlgorithms[message.KeyAlgorithmName](new RSAParameters());
+                //var keyAlg = (PublicKeyAlgorithm)SshSession._publicKeyAlgorithms[message.KeyAlgorithmName];
+
+                var keyAlg = SshSession._publicKeyAlgorithms[message.KeyAlgorithmName](new RSAParameters());
                 keyAlg.LoadKeyAndCertificatesData(message.PublicKey);
 
                 var args = new UserauthArgs(base._session, message.Username, message.KeyAlgorithmName, keyAlg.GetFingerprint(), message.PublicKey);
@@ -103,7 +128,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 
                 var sig = keyAlg.GetSignature(message.Signature);
 
-                using (var worker = new SshDataWorker())
+                using (var worker = new SshDataStream())
                 {
                     worker.WriteBinary(_session.SessionId);
                     worker.Write(message.PayloadWithoutSignature);

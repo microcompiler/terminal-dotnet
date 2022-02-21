@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
     public class RequestMessage : UserauthServiceMessage
     {
@@ -13,11 +10,11 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
-            Username = reader.ReadString(Encoding.UTF8);
-            ServiceName = reader.ReadString(Encoding.ASCII);
-            MethodName = reader.ReadString(Encoding.ASCII);
+            Username = reader.ReadString();
+            ServiceName = reader.ReadString();
+            MethodName = reader.ReadString();
         }
     }
 }

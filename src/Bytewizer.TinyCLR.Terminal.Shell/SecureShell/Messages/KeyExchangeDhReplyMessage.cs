@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages
 {
     public class KeyExchangeDhReplyMessage : Message
     {
@@ -12,7 +10,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
             writer.WriteBinary(HostKey);
             writer.WriteMpint(F);

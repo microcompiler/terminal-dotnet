@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
@@ -34,9 +34,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
                 throw new ArgumentNullException(nameof(data));
             }
 
-            using (var worker = new SshDataWorker(data))
+            using (var worker = new SshDataStream(data))
             {
-                if (worker.ReadString(Encoding.ASCII) != this.Name)
+                if (worker.ReadString() != this.Name)
                     throw new Exception("Key and certificates were not created with this algorithm.");
 
                 var args = new RSAParameters();
@@ -49,11 +49,11 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 
         public override byte[] CreateKeyAndCertificatesData()
         {
-            using (var worker = new SshDataWorker())
+            using (var worker = new SshDataStream())
             {
                 var args = _algorithm.ExportParameters(false);
 
-                worker.Write(this.Name, Encoding.ASCII);
+                worker.Write(this.Name);
                 worker.WriteMpint(args.Exponent);
                 worker.WriteMpint(args.Modulus);
 

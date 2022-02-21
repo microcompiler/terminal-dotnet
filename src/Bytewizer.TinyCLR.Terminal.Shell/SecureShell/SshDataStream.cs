@@ -1,22 +1,24 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 
 namespace Bytewizer.TinyCLR.SecureShell
 {
-    public class SshDataWorker : IDisposable
+    public class SshDataStream : IDisposable
     {
         private readonly MemoryStream _ms;
 
-        public SshDataWorker()
+        public SshDataStream()
         {
             _ms = new MemoryStream(512);
         }
 
-        public SshDataWorker(byte[] buffer)
+        public SshDataStream(byte[] buffer)
         {
-            Contract.Requires(buffer != null);
+            if (buffer == null)
+            {
+                throw new ArgumentNullException(nameof(buffer));
+            }
 
             _ms = new MemoryStream(buffer);
         }
@@ -54,18 +56,23 @@ namespace Bytewizer.TinyCLR.SecureShell
             _ms.Write(bytes, 0, 8);
         }
 
-        public void Write(string str, Encoding encoding)
+        public void Write(string str)
         {
-            Contract.Requires(str != null);
-            Contract.Requires(encoding != null);
+            if (str == null)
+            {
+                throw new ArgumentNullException(nameof(str));
+            }
 
-            var bytes = encoding.GetBytes(str);
+            var bytes = Encoding.UTF8.GetBytes(str);
             WriteBinary(bytes);
         }
 
         public void WriteMpint(byte[] data)
         {
-            Contract.Requires(data != null);
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
 
             if (data.Length == 1 && data[0] == 0)
             {
@@ -91,14 +98,20 @@ namespace Bytewizer.TinyCLR.SecureShell
 
         public void Write(byte[] data)
         {
-            Contract.Requires(data != null);
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
 
             _ms.Write(data, 0, data.Length);
         }
 
         public void WriteBinary(byte[] buffer)
         {
-            Contract.Requires(buffer != null);
+            if (buffer == null)
+            {
+                throw new ArgumentNullException(nameof(buffer));
+            }
 
             Write((uint)buffer.Length);
             _ms.Write(buffer, 0, buffer.Length);
@@ -106,7 +119,10 @@ namespace Bytewizer.TinyCLR.SecureShell
 
         public void WriteBinary(byte[] buffer, int offset, int count)
         {
-            Contract.Requires(buffer != null);
+            if (buffer == null)
+            {
+                throw new ArgumentNullException(nameof(buffer));
+            }
 
             Write((uint)count);
             _ms.Write(buffer, offset, count);
@@ -117,7 +133,9 @@ namespace Bytewizer.TinyCLR.SecureShell
             var num = _ms.ReadByte();
 
             if (num == -1)
-                throw new EndOfStreamException();
+            {
+                throw new Exception("End of stream.");
+            }
             return num != 0;
         }
 
@@ -140,12 +158,10 @@ namespace Bytewizer.TinyCLR.SecureShell
                     (ulong)data[4] << 24 | (ulong)data[5] << 16 | (ulong)data[6] << 8 | data[7]);
         }
 
-        public string ReadString(Encoding encoding)
+        public string ReadString()
         {
-            Contract.Requires(encoding != null);
-
             var bytes = ReadBinary();
-            return encoding.GetString(bytes);
+            return Encoding.UTF8.GetString(bytes);
         }
 
         public byte[] ReadMpint()
@@ -171,7 +187,9 @@ namespace Bytewizer.TinyCLR.SecureShell
             var bytesRead = _ms.Read(data, 0, length);
 
             if (bytesRead < length)
-                throw new ArgumentOutOfRangeException("length");
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
 
             return data;
         }

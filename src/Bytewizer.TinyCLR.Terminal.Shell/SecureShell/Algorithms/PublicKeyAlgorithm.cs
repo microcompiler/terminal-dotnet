@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 using Bytewizer.TinyCLR.Security.Cryptography;
 
@@ -30,9 +29,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
                 throw new ArgumentNullException(nameof(signatureData));
             }
 
-            using (var worker = new SshDataWorker(signatureData))
+            using (var worker = new SshDataStream(signatureData))
             {
-                if (worker.ReadString(Encoding.ASCII) != this.Name)
+                if (worker.ReadString() != this.Name)
                     throw new Exception("Signature was not created with this algorithm.");
 
                 var signature = worker.ReadBinary();
@@ -47,11 +46,11 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
                 throw new ArgumentNullException(nameof(data));
             }
 
-            using (var worker = new SshDataWorker())
+            using (var worker = new SshDataStream())
             {
                 var signature = SignData(data);
 
-                worker.Write(this.Name, Encoding.ASCII);
+                worker.Write(this.Name);
                 worker.WriteBinary(signature);
 
                 return worker.ToByteArray();

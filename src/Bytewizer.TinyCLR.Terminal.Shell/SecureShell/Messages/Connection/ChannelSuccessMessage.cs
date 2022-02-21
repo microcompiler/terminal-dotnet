@@ -8,7 +8,7 @@
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
             writer.Write(RecipientChannel);
         }

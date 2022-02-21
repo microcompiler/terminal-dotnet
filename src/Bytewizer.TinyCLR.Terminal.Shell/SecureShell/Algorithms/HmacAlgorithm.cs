@@ -1,4 +1,6 @@
-﻿using Bytewizer.TinyCLR.Security.Cryptography;
+﻿using System;
+
+using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
@@ -8,9 +10,15 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 
         public HmacAlgorithm(KeyedHashAlgorithm algorithm, int keySize, byte[] key)
         {
-            //Contract.Requires(algorithm != null);
-            //Contract.Requires(key != null);
-            //Contract.Requires(keySize == key.Length << 3);
+            if (algorithm == null)
+            {
+                throw new ArgumentNullException(nameof(algorithm));
+            }
+
+            if (keySize != key.Length << 3)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
 
             _algorithm = algorithm;
             algorithm.Key = key;
@@ -23,7 +31,10 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 
         public byte[] ComputeHash(byte[] input)
         {
-            //Contract.Requires(input != null);
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
 
             return _algorithm.ComputeHash(input);
         }

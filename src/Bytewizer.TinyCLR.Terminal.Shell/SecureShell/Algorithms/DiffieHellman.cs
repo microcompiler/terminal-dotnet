@@ -58,8 +58,6 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 
         public DiffieHellman(int bitlen)
         {
-            //Contract.Requires(bitlen == 1024 || bitlen == 2048);
-
             if (bitlen == 1024)
             {
                 _p = new BigInteger(Okley1024);
@@ -71,7 +69,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
                 _g = new BigInteger(2);
             }
             else
+            {
                 throw new ArgumentException("bitlen", "bitlen must equal 1024 or 2048");
+            }
 
             var bytes = new byte[80]; // 80 * 8 = 640 bits
             _rng.GetBytes(bytes);
@@ -87,7 +87,10 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 
         public byte[] DecryptKeyExchange(byte[] keyEx)
         {
-            //Contract.Requires(keyEx != null);
+            if (keyEx == null)
+            {
+                throw new ArgumentNullException(nameof(keyEx));
+            }
 
             var pvr = BytesToBigInteger(keyEx);
             var z = BigInteger.ModPow(pvr, _x, _p);
@@ -97,8 +100,6 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 
         private static BigInteger BytesToBigInteger(byte[] bytes)
         {
-            //Debug.WriteLine(BitConverter.ToString(bytes));
-
             // Reverse bytes and add an empty byte on to end
             var buffer = new byte[bytes.Length + 1];
             Array.Copy(bytes, buffer, bytes.Length);
@@ -111,7 +112,6 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
                 buffer[j] = z;
             }
 
-            //Debug.WriteLine(BitConverter.ToString(buffer));
             return new BigInteger(buffer);
         }
 

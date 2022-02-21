@@ -8,7 +8,10 @@ namespace Bytewizer.TinyCLR.SecureShell.Algorithms
     {
         public HmacInfo(KeyedHashAlgorithm algorithm, int keySize)
         {
-            //Contract.Requires(algorithm != null);
+            if (algorithm == null)
+            {
+                throw new ArgumentNullException(nameof(algorithm));
+            }
 
             KeySize = keySize;
             Hmac = key => new HmacAlgorithm(algorithm, keySize, key);

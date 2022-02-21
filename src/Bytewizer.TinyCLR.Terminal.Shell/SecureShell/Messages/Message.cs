@@ -16,7 +16,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
             }
 
             RawBytes = bytes;
-            using (var worker = new SshDataWorker(bytes))
+            using (var worker = new SshDataStream(bytes))
             {
                 var number = worker.ReadByte();
                 if (number != MessageType)
@@ -30,7 +30,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
 
         public byte[] GetPacket()
         {
-            using (var worker = new SshDataWorker())
+            using (var worker = new SshDataStream())
             {
                 worker.Write(MessageType);
 
@@ -40,24 +40,36 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages
             }
         }
 
-        public static T LoadFrom<T>(Message message) where T : Message, new()
+        public static object LoadFrom(Message message, Type type) 
         {
             if (message == null)
             {
                 throw new ArgumentNullException(nameof(message));
             }
 
-            var msg = new T();
+            var msg = (Message)Activator2.CreateInstance(type); // TODO: Hardcode for performance?
             msg.Load(message.RawBytes);
             return msg;
         }
 
-        protected virtual void OnLoad(SshDataWorker reader)
+        //public static T LoadFrom<T>(Message message) where T : Message, new()
+        //{
+        //    if (message == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(message));
+        //    }
+
+        //    var msg = new T();
+        //    msg.Load(message.RawBytes);
+        //    return msg;
+        //}
+
+        protected virtual void OnLoad(SshDataStream reader)
         {
             throw new NotSupportedException();
         }
 
-        protected virtual void OnGetPacket(SshDataWorker writer)
+        protected virtual void OnGetPacket(SshDataStream writer)
         {
             throw new NotSupportedException();
         }

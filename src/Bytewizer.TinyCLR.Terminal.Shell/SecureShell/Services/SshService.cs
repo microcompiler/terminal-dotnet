@@ -4,9 +4,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Services
 {
     public abstract class SshService
     {
-        protected internal readonly Session _session;
+        protected internal readonly SshSession _session;
 
-        public SshService(Session session)
+        public SshService(SshSession session)
         {
             Contract.Requires(session != null);
 

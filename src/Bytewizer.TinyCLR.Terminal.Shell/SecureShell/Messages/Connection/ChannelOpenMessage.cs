@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class ChannelOpenMessage : ConnectionServiceMessage
     {
@@ -14,9 +11,9 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
-            ChannelType = reader.ReadString(Encoding.ASCII);
+            ChannelType = reader.ReadString();
             SenderChannel = reader.ReadUInt32();
             InitialWindowSize = reader.ReadUInt32();
             MaximumPacketSize = reader.ReadUInt32();

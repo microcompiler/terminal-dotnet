@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
+﻿namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class ChannelOpenFailureMessage : ConnectionServiceMessage
     {
@@ -13,12 +11,12 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
             writer.Write(RecipientChannel);
             writer.Write((uint)ReasonCode);
-            writer.Write(Description, Encoding.ASCII);
-            writer.Write(Language ?? "en", Encoding.ASCII);
+            writer.Write(Description);
+            writer.Write(Language ?? "en");
         }
     }
 }

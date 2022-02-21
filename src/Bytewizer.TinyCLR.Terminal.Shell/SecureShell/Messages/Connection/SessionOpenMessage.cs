@@ -4,7 +4,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Connection
 {
     public class SessionOpenMessage : ChannelOpenMessage
     {
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             base.OnLoad(reader);
 

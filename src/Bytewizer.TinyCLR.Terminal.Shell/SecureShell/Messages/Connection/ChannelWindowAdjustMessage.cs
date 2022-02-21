@@ -9,13 +9,13 @@
 
         public override byte MessageType { get { return MessageNumber; } }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             RecipientChannel = reader.ReadUInt32();
             BytesToAdd = reader.ReadUInt32();
         }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
             writer.Write(RecipientChannel);
             writer.Write(BytesToAdd);

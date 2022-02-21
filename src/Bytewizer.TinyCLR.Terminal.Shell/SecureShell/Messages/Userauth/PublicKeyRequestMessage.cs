@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 {
@@ -12,7 +11,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
 
         public byte[] PayloadWithoutSignature { get; private set; }
 
-        protected override void OnLoad(SshDataWorker reader)
+        protected override void OnLoad(SshDataStream reader)
         {
             base.OnLoad(reader);
 
@@ -22,7 +21,7 @@ namespace Bytewizer.TinyCLR.SecureShell.Messages.Userauth
             }
 
             HasSignature = reader.ReadBoolean();
-            KeyAlgorithmName = reader.ReadString(Encoding.ASCII);
+            KeyAlgorithmName = reader.ReadString();
             PublicKey = reader.ReadBinary();
 
             if (HasSignature)

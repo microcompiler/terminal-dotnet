@@ -4,7 +4,7 @@
     {
         public uint ExitStatus { get; set; }
 
-        protected override void OnGetPacket(SshDataWorker writer)
+        protected override void OnGetPacket(SshDataStream writer)
         {
             RequestType = "exit-status";
             WantReply = false;

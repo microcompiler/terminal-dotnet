@@ -1,4 +1,6 @@
-﻿using Bytewizer.TinyCLR.Security.Cryptography;
+﻿using System;
+
+using Bytewizer.TinyCLR.Security.Cryptography;
 
 namespace Bytewizer.TinyCLR.SecureShell.Algorithms
 {
